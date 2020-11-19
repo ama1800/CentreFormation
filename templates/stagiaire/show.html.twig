@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stagiaire{% endblock %}
+
+{% block body %}
+    <h1>Stagiaire</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ stagiaire.id }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ stagiaire.email }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ stagiaire.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ stagiaire.prenom }}</td>
+            </tr>
+            <tr>
+                <th>Cp</th>
+                <td>{{ stagiaire.cp }}</td>
+            </tr>
+            <tr>
+                <th>Commune</th>
+                <td>{{ stagiaire.commune }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ stagiaire.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Portable</th>
+                <td>{{ stagiaire.portable }}</td>
+            </tr>
+            <tr>
+                <th>Civilite</th>
+                <td>{{ stagiaire.civilite ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>EnterAt</th>
+                <td>{{ stagiaire.enterAt ? stagiaire.enterAt|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>ExitAt</th>
+                <td>{{ stagiaire.exitAt ? stagiaire.exitAt|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Photo</th>
+                <td>{{ stagiaire.photo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('stagiaire_index') }}">back to list</a>
+
+    <a href="{{ path('stagiaire_edit', {'id': stagiaire.id}) }}">edit</a>
+
+    {{ include('stagiaire/_delete_form.html.twig') }}
+{% endblock %}

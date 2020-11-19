@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <h1>Personnel</h1>
+    <div class="headforum">
+        <nav class="navbar navbar-inverse">
+            <table class="table">
+                <thead class="table-active">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Roles</th>
+                        <th>Civilite</th>
+                        <th>DateNaissance</th>
+                        <th>Adresse</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+        {% for user in users %}
+                <tbody class="table-light">
+                    <tr>
+                        <td><a href="{{ path('user_show', {'id': user.id}) }}">{{ user.nom }} {{ user.prenom }}</a></td>
+                        <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                        <td>{{ user.civilite ? 'Monsieur' : 'Madame' }}</td>
+                        <td>{{ user.dateNaissance ? user.dateNaissance|date('d-m-Y') : '' }}</td>
+                        <td><p><br>{{ user.adresse }}<br> {{ user.cp }}<br> {{ user.commune }}</p></td>
+                        <td>
+                            <a href="{{ path('user_show', {'id': user.id}) }}">profile</a>
+                            <a href="{{ path('user_edit', {'id': user.id}) }}">modifier</a>
+                        </td>
+                    </tr>
+                </tbody>
+        {% else %}
+                <tbody class="table table-striped table-dark">
+                    <tr>
+                        <td colspan="11">no records found</td>
+                    </tr>
+                </tbody>
+        {% endfor %}
+            </table>
+        </nav>
+    </div>
+
+    <a href="{{ path('user_new') }}">Nouveau Membre</a>
+{% endblock %}

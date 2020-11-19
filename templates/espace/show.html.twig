@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace{% endblock %}
+
+{% block body %}
+    <h1>Espace</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ espace.id }}</td>
+            </tr>
+            <tr>
+                <th>Duree</th>
+                <td>{{ espace.duree }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('espace_index') }}">back to list</a>
+
+    <a href="{{ path('espace_edit', {'id': espace.id}) }}">edit</a>
+
+    {{ include('espace/_delete_form.html.twig') }}
+{% endblock %}

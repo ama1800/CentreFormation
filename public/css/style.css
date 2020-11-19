@@ -1,0 +1,82 @@
+*
+{
+    box-sizing: border-box;
+}
+body
+{
+    background-color: lightblue;
+}
+#logo
+{
+    width: 60px; height: 60px;
+}
+#page {
+	min-height:100vh; 
+	display:flex;
+	flex-direction:column;
+}
+
+#content {
+	flex-grow:1;
+	width: 96%;
+ 	margin: auto;
+}
+.jumbotron{
+	width: 90%;
+	margin: 1% 0 0 1%;
+}
+.security{
+	display: flex;
+	justify-content: space-around;
+	position: absolute;
+	text-decoration: none;
+	top: 0;
+	right: 1%;
+	color: white;
+}
+.btn1{
+	margin-right: 5px !important;
+	color: blue !important;
+	cursor: pointer !important;
+	all: unset;
+}
+.btn-deconnexion{
+	margin-right: 5px !important;
+	color: blue !important;
+	cursor: pointer !important;
+	all: unset;
+}
+.article{
+	width: 400px;
+	height: 200px;
+}
+#entete{
+	display: flex;
+	justify-content: space-around;
+}
+.user{
+	margin-right: 5px !important;
+	color: darkblue  !important;
+	cursor: pointer !important;
+	all: unset;
+}
+#navbarColor01{
+	display: contents !important;
+}
+ul.navbar-nav.mr-auto{
+	display: contents !important;
+}
+.form-inline.my-2.my-lg-0{
+	position: absolute !important;
+	right: 1%;
+}
+.table-active{
+	color: aliceblue;
+}
+tbody{
+	border-bottom: 2px black solid;
+}
+.btn.btn-primary{
+	margin: 0 0 2px 0 !important;
+	height: 25px;
+}

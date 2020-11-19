@@ -2,11 +2,71 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}
+        Salut Les Amis
+        {% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://bootswatch.com/2/superhero/bootstrap.min.css">
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div id="page">
+            <div id="header">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                    <a class="navbar-brand" href=""><img id="logo" src="{{ asset('img/php.png') }}" alt="CENTRE@FORMATION"></a>
+                    <div class="collapse navbar-collapse" id="navbarColor01">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{ path('categorie_index')}}">ACCEUIL</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{ path('formation_index')}}">Nos Formations</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{ path('user_index')}}">Users</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{ path('session_index')}}">Sessions</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#"></a>
+                            </li>
+                        </ul>
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                        <div class="security">
+                        {% if not app.user %}
+                            <div> <a class="btn1" href="{{path('app_login')}}"><button  class="btn btn-primary">Connexion</button></a></div>
+                        {% else %}
+                            <div><span style="color: white">Vous etes Connecter: </span><a class="user" href="{{path('user_show',{'id': app.user.Id})}}">{{app.user.nom}} </a></div>
+                            <div> <a class="btn-deconnexion" href="{{path('user_show',{'id': app.user.Id})}}"><button  class="btn btn-primary">Profile</button></a></div>
+                            <div> <a class="btn-deconnexion" href="{{path('app_logout')}}"><button  class="btn btn-primary">Déconnexion</button></a></div>
+                            <div> <a class="btn1" href="{{path('user_new')}}"><button  class="btn btn-primary">Nouveau Membre</button></a></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </nav>
+            </div>
+            <div id="content">    
+                {% block body %}
+                {% endblock %}
+            </div>
+            <div id="footer">
+                <footer>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                        <small> Projet CENTRE FORMATION Par Le Stagiaire AIT M'HAMED AHMED &copy;2020</small>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        {% block javascripts %}
+        
+        {% endblock %}
     </body>
 </html>
