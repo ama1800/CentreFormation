@@ -3,28 +3,47 @@
 {% block title %}Formation{% endblock %}
 
 {% block body %}
-    <h1>Formation</h1>
-
-    <table class="table">
-        <tbody>
+    <h1>{{ formation.libelle }}</h1>
+<div>
+    <div id="entete">
+        <a  style="position:absolute; right:1%; top: 15%;" href="{{ path("categorie_show", { 'id': formation.categorie.id})}}"><button type="button" class="btn btn-outline-primary">Categorie: {{ formation.categorie.libelle }}</button></a>
+    </div>
+    <div class="description">
+        <div style="max-width: 60%;">
+    <h3>Le Métier</h3>
+            <div class="card text-white bg-info mb-3" style="max-width: 90%;">
+                <p class="text-justify">{{ formation.description }}</p>
+            </div>
+            <div  style="max-width: 100%;">
+                <img class="img-fluid" src="{{ asset('uploads/' ~  formation.photo) }}" alt="{{ formation.libelle }}" >
+            </div><br>
+        </div>
+        <div  style="max-width: 40%;">
+            <h3>Les Modules</h3>
+            {% for module in formation.espaces %}
+            <ul>
+                <li style="max-width: 90%;">
+                    <div class="list-group">
+                        <blockquote>
+                            <a class="list-group-item list-group-item-action active accordion" style="margin:0;">{{ module.module.libelle }}</a>
+                            <p class="text" style="display:none; border:2px solid #007bff">{{ module.module.description }}<br> Durée de: <small>{{ module.duree}} Semaines</small>
+                            <a href="{{ path('module_show', {'id': module.id}) }}" class="list-group-item list-group-item-action primary">Plus
+                            </a>
+                            </p>
+                        </blockquote>
+                    </div>
+                </li>
+            </ul>
+            {% else %}
             <tr>
-                <th>Id</th>
-                <td>{{ formation.id }}</td>
+                <td colspan="4">no records found</td>
             </tr>
-            <tr>
-                <th>Libelle</th>
-                <td>{{ formation.libelle }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ formation.description }}</td>
-            </tr>
-        </tbody>
-    </table>
+            {% endfor %}
+        </div>
+    </div>
 
-    <a href="{{ path('formation_index') }}">back to list</a>
-
-    <a href="{{ path('formation_edit', {'id': formation.id}) }}">edit</a>
-
+</div>
+    <a class="btn btn-primary btn-lg" href="{{ path('formation_edit', {'id': formation.id}) }}">Modifier</a>
+    <a class="btn btn-primary btn-lg" href="{{ path('formation_index') }}">liste des Formations</a>
     {{ include('formation/_delete_form.html.twig') }}
 {% endblock %}

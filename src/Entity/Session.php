@@ -35,15 +35,22 @@ class Session
     private $endAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Formation::class, inversedBy="sessions")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Formation::class, inversedBy="sessions",cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $formation;
 
     /**
-     * @ORM\OneToMany(targetEntity=Stagiaire::class, mappedBy="session")
+     * @ORM\ManyToMany(targetEntity=Stagiaire::class, mappedBy="sessions",cascade={"persist"})
      */
     private $stagiaires;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $photo;
+
+    
 
     public function __construct()
     {
@@ -96,7 +103,7 @@ class Session
         return $this->formation;
     }
 
-    public function setFormation(?Formation $formation): self
+    public function setFormation(?Formation $formation=null): self
     {
         $this->formation = $formation;
 
@@ -115,7 +122,7 @@ class Session
     {
         if (!$this->stagiaires->contains($stagiaire)) {
             $this->stagiaires[] = $stagiaire;
-            $stagiaire->setSession($this);
+            $stagiaire->addSession($this);
         }
 
         return $this;
@@ -124,11 +131,20 @@ class Session
     public function removeStagiaire(Stagiaire $stagiaire): self
     {
         if ($this->stagiaires->removeElement($stagiaire)) {
-            // set the owning side to null (unless already changed)
-            if ($stagiaire->getSession() === $this) {
-                $stagiaire->setSession(null);
-            }
+            $stagiaire->removeSession($this);
         }
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
 
         return $this;
     }

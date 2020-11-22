@@ -30,13 +30,13 @@ class Module
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="modules")
+     * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="modules" ,cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $categorie;
 
     /**
-     * @ORM\OneToMany(targetEntity=Espace::class, mappedBy="module")
+     * @ORM\OneToMany(targetEntity=Espace::class, mappedBy="module",cascade={"persist"})
      */
     private $espaces;
 
@@ -79,7 +79,7 @@ class Module
         return $this->categorie;
     }
 
-    public function setCategorie(?Categorie $categorie): self
+    public function setCategorie(?Categorie $categorie=null): self
     {
         $this->categorie = $categorie;
 

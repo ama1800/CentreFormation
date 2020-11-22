@@ -23,13 +23,13 @@ class Espace
     private $duree;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Formation::class, inversedBy="espaces")
+     * @ORM\ManyToOne(targetEntity=Formation::class, inversedBy="espaces",cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $formation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Module::class, inversedBy="espaces")
+     * @ORM\ManyToOne(targetEntity=Module::class, inversedBy="espaces",cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $module;

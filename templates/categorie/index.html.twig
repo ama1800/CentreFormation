@@ -1,37 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Categorie index{% endblock %}
+{% block title %}Categories{% endblock %}
 
 {% block body %}
-    <h1>Categorie index</h1>
+    <h1>Les Categories</h1><br>
+    
+    <a href="{{ path('categorie_new') }}">Ajout de Categorie</a>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Libelle</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for categorie in categories %}
-            <tr>
-                <td>{{ categorie.id }}</td>
-                <td>{{ categorie.libelle }}</td>
-                <td>{{ categorie.description }}</td>
-                <td>
-                    <a href="{{ path('categorie_show', {'id': categorie.id}) }}">show</a>
-                    <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('categorie_new') }}">Create new</a>
+    <div class="headforum">
+        <nav class="navbar navbar-inverse">
+            <table class="table">
+                <thead class="table-active">
+                    <tr>
+                        <th>La Categorie</th>
+                        {# <th>Description</th> #}
+                        <th>Les Modules</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+{% for categorie in categories %}
+                <tbody class="table-light">
+                    <tr>
+                        <td><a href="{{ path('categorie_show', {'id': categorie.id}) }}">{{ categorie.libelle }}</a></td>
+                        {# <td><p>{{ categorie.description }}</p></td> #}
+                        <td>
+                        {% for module in categorie.modules %}
+                        <ul>
+                            <li>
+                                <div class="list-group">
+                                    <a href="{{ path('module_show', {'id': module.id}) }}" class="list-group-item list-group-item-action active">{{ module.libelle }}</a>
+                                </div>
+                            </li>
+                        </ul>
+                        {% else %}
+                        <tr>
+                            <td colspan="4">no records found</td>
+                        </tr>
+                        {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{{ path('categorie_show', {'id': categorie.id}) }}">Détails</a>
+                            <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">Modifier</a>
+                        </td>
+                    </tr>
+                </tbody>
+{% else %}
+                <tbody class="table table-striped table-dark">
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                </tbody>
+{% endfor %}
+            </table>
+        </nav>
+    </div>
 {% endblock %}

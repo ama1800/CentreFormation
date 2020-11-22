@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -82,9 +84,19 @@ class User implements UserInterface
      */
     private $commune;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Categorie::class, inversedBy="users")
+     */
+    private $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
+
     public function __toString()
     {
-        $this->nom.''.$this->prenom.''.$this->email;
+        // $this->nom.''.$this->prenom.''.$this->email;
     }
 
     public function getId(): ?int
@@ -245,6 +257,30 @@ class User implements UserInterface
     public function setCommune(string $commune): self
     {
         $this->commune = $commune;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Categorie[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Categorie $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Categorie $category): self
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }

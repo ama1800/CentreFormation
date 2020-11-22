@@ -47,4 +47,21 @@ class EspaceRepository extends ServiceEntityRepository
         ;
     }
     */
+    /**
+     * @return Espace[]
+     */
+    public function dureeEspace(int $duree): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT SUM(e.duree) AS somme
+            FROM App\Entity\Espace e
+            INNER JOIN App\Entity\Formation f
+            ON e.formation_id = f.id'
+        )->setParameter('duree', $duree);
+
+        // returns an array of Espace objects
+        return $query->getOneOrNullResult();
+    }
 }

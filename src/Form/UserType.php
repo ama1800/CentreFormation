@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
@@ -18,7 +19,11 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class)
-            // ->add('roles')
+            ->add('roles',ChoiceType::class,[
+                'label' => 'Le Role : ',
+                'required' => false,
+                'choices'  => $options['choices']
+            ])
             ->add('password', PasswordType::class)
             ->add('confirm_password', PasswordType::class)
             ->add('nom', TextType::class)
@@ -36,10 +41,19 @@ class UserType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setRequired(['choices']);
+
+        $resolver->setDefaults(
+            [
             'data_class' => User::class,
-        ]);
+                'choices' => [],
+            ]
+        );
     }
 }

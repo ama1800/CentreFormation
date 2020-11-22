@@ -30,20 +30,25 @@ class Formation
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity=Session::class, mappedBy="formation")
+     * @ORM\OneToMany(targetEntity=Session::class, mappedBy="formation",cascade={"persist"})
      */
     private $sessions;
 
     /**
-     * @ORM\OneToMany(targetEntity=Espace::class, mappedBy="formation")
+     * @ORM\OneToMany(targetEntity=Espace::class, mappedBy="formation",cascade={"persist"})
      */
     private $espaces;
 
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="formations")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $categorie;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $photo;
 
     public function __construct()
     {
@@ -145,9 +150,21 @@ class Formation
         return $this->categorie;
     }
 
-    public function setCategorie(?Categorie $categorie): self
+    public function setCategorie(?Categorie $categorie=null): self
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
 
         return $this;
     }

@@ -3,9 +3,11 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <h1 class="text-warning">{{ user.civilite ? 'Monsieur' : 'Madame' }} {{ user.nom }} {{ user.prenom }}</h1>
-<div class="card border-success mb-3" style="max-width: 25rem;">
-  <div class="card-header">user ID: {{ user.id }}<br>
+
+{% if app.user %}
+<h1 class="text-warning">{{ user.civilite ? 'Monsieur' : 'Madame' }} {{ user.nom }} {{ user.prenom }}</h1>
+<div class="card border-info mb-3" style="max-width: 40%;">
+  <div class="card-header text-danger">user ID: {{ user.id }}<br>
   </div>
   <div class="card-body text-success">
     <h6 class="card-title">DATE DE NAISSANCE : {{ user.dateNaissance ? user.dateNaissance|date('d-m-Y') : '' }}</h6>
@@ -14,9 +16,18 @@
   </div>
 </div>
 <div style="display: flex;">
-    <a style=" margin-right:1%; width: 10%" href="{{ path('user_index') }}" class="btn btn-primary">Collegues</a>
-    <a style=" margin-right: 1%; width: 10%" href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-primary">Modifier</a>
-    {{ include('user/_delete_form.html.twig') }}
+  <a style=" margin-right:1%; width: 10%" href="{{ path('user_index') }}" class="btn btn-primary">Collegues</a>
+  {% if app.user.id == user.id or app.user.roles[0] == "ROLE_SUPER_ADMIN" %}
+  <a style=" margin-right: 1%; width: 10%" href="{{ path('user_edit', {'id': user.id}) }}"
+    class="btn btn-primary">Modifier</a>
+  {{ include('user/_delete_form.html.twig') }}
+  {# {% else %}
+  <span style="color: red">Vous n'etes autoriser à modifier ou à supprimer à ce contenu..!</span> #}
+  {% endif %}
 </div><br><br>
-    {#  #}
+{% else %}
+<span style="color: red">Vous n'etes pas connecter </span>
+<a class="btn1" href="{{path('app_login')}}">Connexion</a>
+{% endif %}
+{#  #}
 {% endblock %}

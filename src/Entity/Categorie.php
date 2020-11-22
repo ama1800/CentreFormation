@@ -30,25 +30,26 @@ class Categorie
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class)
+     * @ORM\OneToMany(targetEntity=Module::class, mappedBy="categorie",cascade={"persist"})
      */
-    private $formateurs;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Module::class, mappedBy="categorie")
-     */
+   
     private $modules;
 
     /**
-     * @ORM\OneToMany(targetEntity=Formation::class, mappedBy="categorie")
+     * @ORM\OneToMany(targetEntity=Formation::class, mappedBy="categorie",cascade={"persist"})
      */
     private $formations;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="categories",cascade={"persist"})
+     */
+    private $users;
+
     public function __construct()
     {
-        $this->formateurs = new ArrayCollection();
         $this->modules = new ArrayCollection();
         $this->formations = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function __toString()
@@ -85,29 +86,6 @@ class Categorie
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getFormateurs(): Collection
-    {
-        return $this->formateurs;
-    }
-
-    public function addFormateur(User $formateur): self
-    {
-        if (!$this->formateurs->contains($formateur)) {
-            $this->formateurs[] = $formateur;
-        }
-
-        return $this;
-    }
-
-    public function removeFormateur(User $formateur): self
-    {
-        $this->formateurs->removeElement($formateur);
-
-        return $this;
-    }
 
     /**
      * @return Collection|Module[]
@@ -164,6 +142,33 @@ class Categorie
             if ($formation->getCategorie() === $this) {
                 $formation->setCategorie(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeCategory($this);
         }
 
         return $this;

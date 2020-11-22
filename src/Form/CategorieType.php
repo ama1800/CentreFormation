@@ -2,9 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\User;
+use App\Form\UserType;
 use App\Entity\Categorie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CategorieType extends AbstractType
@@ -14,7 +17,12 @@ class CategorieType extends AbstractType
         $builder
             ->add('libelle')
             ->add('description')
-            // ->add('formateurs')
+            ->add('users', EntityType::class, [
+                    'class' => User::class,
+                    'choice_label' => 'nom',                
+                    'multiple'=>false,
+                    'expanded' => true
+                ])
         ;
     }
 

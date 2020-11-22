@@ -80,3 +80,33 @@ tbody{
 	margin: 0 0 2px 0 !important;
 	height: 25px;
 }
+ul {
+	list-style-type: none;
+  }
+.progress{
+  position: relative;
+  bottom: -20px;
+  }
+.description{
+	display: flex;
+	justify-content: space-between;
+}
+.text{
+	color: black;
+}
+.accordion:after {
+content: '\002B';
+position: absolute;
+cursor: pointer;
+color: #e36b23;
+right: 0;
+top: 0%;
+font-size: xx-large;
+}
+.actuel:after {
+content: "\2212";
+background-color:lightblue; 
+}
+blockquote{
+	margin: 0;
+}
