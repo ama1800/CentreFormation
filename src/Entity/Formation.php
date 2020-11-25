@@ -30,12 +30,12 @@ class Formation
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity=Session::class, mappedBy="formation",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Session::class, mappedBy="formation",cascade="all", orphanRemoval=true)
      */
     private $sessions;
 
     /**
-     * @ORM\OneToMany(targetEntity=Espace::class, mappedBy="formation",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Espace::class, mappedBy="formation",cascade="all")
      */
     private $espaces;
 

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Stagiaire;
+use App\Form\SessionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class StagiaireType extends AbstractType
 {
@@ -36,10 +38,12 @@ class StagiaireType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('photo', TextType::class)
-            ->add('sessions',ChoiceType::class,[
-                'label' => 'Stagiaire Sessions : ',
-                'required' => false,
-                'choices'  => $options['choices']
+            ->add('sessions',CollectionType::class,[
+                'entry_type' => SessionType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,        
+                'by_reference' => false
             ])
         ;
     }

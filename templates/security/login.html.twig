@@ -1,28 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connectez-Vous!{% endblock %}
 
 {% block body %}
+
+{% if app.flashes('message') %}
+
+{% for message in app.flashes('message') %}
+<div class="alert alert-success" role="alert">{{ message }}</div>
+{% endfor %}
+
+{% elseif app.flashes('danger') %}
+
+{% for message1 in app.flashes('danger') %}
+<div class="alert alert-danger" role="alert">{{ message1 }}</div>
+{% endfor %}
+
+{% elseif app.flashes('warning') %}
+
+{% for message2 in app.flashes('danger') %}
+<div class="alert alert-warning" role="alert">{{ message2 }}</div>
+{% endfor %}
+
+{% endif %}
 <form method="post">
     {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
+    <div class="mb-3">
+        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+    </div>
     {% endif %}
 
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
+    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required
+        autofocus>
     <label for="inputPassword">Password</label>
     <input type="password" name="password" id="inputPassword" class="form-control" required>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
     {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
@@ -39,4 +58,5 @@
         Sign in
     </button>
 </form>
+<small>Vous avez oublié le Mot de passe <a href="{{ path('app_forgottenPassword')}}">Appuyez Ici</a></small>
 {% endblock %}

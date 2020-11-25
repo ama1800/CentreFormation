@@ -7,8 +7,8 @@ use App\Form\UserType;
 use App\Entity\Categorie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class CategorieType extends AbstractType
 {
@@ -17,12 +17,13 @@ class CategorieType extends AbstractType
         $builder
             ->add('libelle')
             ->add('description')
-            ->add('users', EntityType::class, [
-                    'class' => User::class,
-                    'choice_label' => 'nom',                
-                    'multiple'=>false,
-                    'expanded' => true
-                ])
+            ->add('users', CollectionType::class,[
+                'entry_type' => UserType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,        
+                'by_reference' => false
+            ])
         ;
     }
 

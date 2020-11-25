@@ -30,18 +30,18 @@ class Categorie
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity=Module::class, mappedBy="categorie",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Module::class, mappedBy="categorie",cascade="all")
      */
    
     private $modules;
 
     /**
-     * @ORM\OneToMany(targetEntity=Formation::class, mappedBy="categorie",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Formation::class, mappedBy="categorie",cascade="all")
      */
     private $formations;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="categories",cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="categories",cascade="all")
      */
     private $users;
 

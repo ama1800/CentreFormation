@@ -8,10 +8,12 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
+ * @isGranted("ROLE_USER")
  * @Route("/user")
  */
 class UserController extends AbstractController
@@ -27,9 +29,10 @@ class UserController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_ADMINISTRATEUR")    
      * @Route("/new", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
+    public function new(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -38,9 +41,28 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $hash= $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
+            // Generer le token d'activation de compte
+            $user->setActivationToken(md5(uniqid()));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+
+            // Céation du message
+            $message= (new \Swift_Message('Activation de votre compte'))
+            // Expiditeur
+            ->setFrom('votre@adresse.fr')
+            // Destenataire
+            ->setTo('destinataire@adresse.fr')
+            // Contenu
+            ->setBody(
+               $this->renderView(
+                   'emails/activation.html.twig',['token' => $user->getActivationToken()]
+               ),
+               'text/html'
+            );
+            // on envoie l'email
+            $mailer->send($message);
+
 
             return $this->redirectToRoute('user_index');
         }
@@ -85,6 +107,7 @@ class UserController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_ADMINISTRATEUR")
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
      */
     public function delete(Request $request, User $user): Response
@@ -96,5 +119,32 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
+    }
+    // 
+    /**
+     * @Route("/activation/{token}", name="user_activation", methods={"GET","POST"})
+     */
+    public function activation($token,UserRepository $userRepository ): Response
+    {
+        // verification de l'exestense de token a la base de donnee
+        $user=$userRepository->findOneBy(['activationToken' => $token]);
+
+        // Si aucun user ne posséde ce token
+
+        if(!$user)
+        {
+            // Erreur ce token n'existe pas
+            throw $this->createNotFoundException('Cet Utilisateur n\'exist pas!');
+        }
+        // Si token existe alors on le supprime
+        
+        $user->setActivationToken(null);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        // Message flash de sucess activation
+        $this->addFlash('message', 'Votre compte est activer vous pouvez y acceder et changer votre mot de passe. Merci');
+        return $this->redirectToRoute('app_login');
     }
 }

@@ -38,11 +38,15 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/moderation, roles: ROLE_RESPONSABLE }
+        - { path: ^/profile, roles: ROLE_USER }
+
     role_hierarchy:
-        ROLE_EMPLOYE: ROLE_USER
-        ROLE_SECRITARIAT: ROLE_EMPLOYE
-        ROLE_FORMATTEUR:  ROLE_SECRITARIAT
-        ROLE_RESPONSABLE: ROLE_FORMATTEUR
-        ROLE_SUPER_ADMIN: [ROLE_RESPONSABLE, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_EMPLOYE: "ROLE_USER"
+        ROLE_SECRITARIAT: "ROLE_EMPLOYE"
+        ROLE_FORMATTEUR:  "ROLE_SECRITARIAT"
+        ROLE_RESPONSABLE: "ROLE_FORMATTEUR"
+        ROLE_ADMINISTRATEUR: "ROLE_RESPONSABLE"
+        ROLE_SUPER_ADMIN: "ROLE_ADMINISTRATEUR, ROLE_ALLOWED_TO_SWITCH"
+       

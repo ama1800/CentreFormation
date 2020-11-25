@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}User index{% endblock %}
-
 {% block body %}
+{% if is_granted("ROLE_RESPONSABLE") %}
 <h1>Personnel</h1>
+
+{% if app.user.roles[0] == "ROLE_SUPER_ADMIN" %}
+<a href="{{ path('user_new') }}">Nouveau Membre</a>
+{% endif %}
+
 <div class="headforum">
     <nav class="navbar navbar-inverse">
         <table class="table">
@@ -12,7 +17,7 @@
                     <th>Nom</th>
                     <th>Role</th>
                     <th>Civilite</th>
-                    <th>DateNaissance</th>
+                    <th>Age</th>
                     <th>Adresse</th>
                     <th>actions</th>
                 </tr>
@@ -25,27 +30,26 @@
                 <tr>
                     <td><a href="{{ path('user_show', {'id': user.id}) }}">{{ user.nom }} {{ user.prenom }}</a></td>
                     <td>
-                        {% for role in user.roles %}
-                        {# <pre>
-                    {{ dump(role) }}
-                </pre> #}
-                        {% if role == "ROLE_EMPLOYE"  %}
+                        {% if user.roles[0] == "ROLE_EMPLOYE"  %}
                         <span style="color: grey">EMPLOYE </span>
-                        {% elseif role == "ROLE_SECRITARIAT"  %}
+                        {% elseif user.roles[0] == "ROLE_SECRITARIAT"  %}
                         <span style="color: goldenrod">SECRETAIRE </span>
-                        {% elseif role == "ROLE_FORMATTEUR"  %}
+                        {% elseif user.roles[0] == "ROLE_FORMATTEUR"  %}
                         <span style="color: green">FORMATEUR </span>
-                        {% elseif role == "ROLE_RESPONSABLE"  %}
+                        {% elseif user.roles[0] == "ROLE_RESPONSABLE"  %}
                         <span style="color: blue"> RESPONSABLE</span>
-                        {% elseif role == "ROLE_SUPER_ADMIN"  %}
+                        {% elseif user.roles[0] == "ROLE_ADMINISTRATEUR"  %}
                         <span style="color: red">ADMINISTRATEUR </span>
+                        {% elseif user.roles[0] == "ROLE_SUPER_ADMIN"  %}
+                        <span style="color: brown">SUP_ADMIN </span>
+                        {% else %}
+                        <span style="color: black">EMPLOYE </span>
                         {# {% else %}
                         {{ user.roles ? role : '' }} #}
                         {% endif %}
-                        {% endfor %}
                     </td>
                     <td>{{ user.civilite ? 'Monsieur' : 'Madame' }}</td>
-                    <td>{{ user.dateNaissance ? user.dateNaissance|date('d-m-Y') : '' }}</td>
+                    <td>{{ user.dateNaissance ? date().diff(date(user.dateNaissance)).y : '' }} Ans</td>
                     <td>
                         <p><br>{{ user.adresse }}<br> {{ user.cp }}<br> {{ user.commune }}</p>
                     </td>
@@ -67,7 +71,8 @@
         </table>
     </nav>
 </div>
-{% if app.user.roles[0] == "ROLE_SUPER_ADMIN" %}
-<a href="{{ path('user_new') }}">Nouveau Membre</a>
+
+{% else %}
+<div class="alert alert-danger" role="alert"><span>Vous n'avez pas le droit d'afficher ce contenu, si erreur contacter l'ADMINISTRATEUR</span></div>
 {% endif %}
 {% endblock %}

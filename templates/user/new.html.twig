@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Creer un nouveau membre{% endblock %}
-{% if app.user.roles[0] == "ROLE_SUPER_ADMIN" %}
 {% block body %}
+{% if app.user.roles[0] == "ROLE_SUPER_ADMIN" %}
 <h1>Nouveau utilisateur</h1>
 
 {{ include('user/_form.html.twig') }}
 
 <a href="{{ path('user_index') }}">back to list</a>
-{% endblock %}
 {% else %}
 <span style="color: red">Vous n'etes pas autoriser à créer un compte..!</span>
 {% endif %}
+{% endblock %}

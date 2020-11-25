@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\SessionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
+use App\Repository\SessionRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SessionRepository::class)
@@ -35,13 +37,13 @@ class Session
     private $endAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Formation::class, inversedBy="sessions",cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity=Formation::class, inversedBy="sessions",cascade="all")
      */
     private $formation;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Stagiaire::class, mappedBy="sessions",cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity=Stagiaire::class, mappedBy="sessions" ,cascade="all")     
+     * @Assert\Valid()
      */
     private $stagiaires;
 

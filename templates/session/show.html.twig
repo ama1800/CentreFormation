@@ -23,6 +23,13 @@
                 <th>EndAt</th>
                 <td>{{ session.endAt ? session.endAt|date('Y-m-d') : '' }}</td>
             </tr>
+            <tr>
+                <th>Stagiaires</th>
+                {% for stagiaire in session.stagiaires %}
+                    
+                <td>{{ stagiaire.nom }}</td>
+                {% endfor %}
+            </tr>
         </tbody>
     </table>
 

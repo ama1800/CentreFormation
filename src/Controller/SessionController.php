@@ -5,21 +5,34 @@ namespace App\Controller;
 use App\Entity\Session;
 use App\Form\SessionType;
 use App\Repository\SessionRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/session")
  */
 class SessionController extends AbstractController
-{
+{   
+    
+    /**
+    * @Route("/calendar", name="session_calendar", methods={"GET"})
+    */
+   public function calendar(SessionRepository $sessionRepository): Response
+   {
+       return $this->render('session/calendar.html.twig', [
+           'sessions' => $sessionRepository->findAll(),
+           ]);
+   }
+   
     /**
      * @Route("/", name="session_index", methods={"GET"})
      */
     public function index(SessionRepository $sessionRepository): Response
     {
+        
         return $this->render('session/index.html.twig', [
             'sessions' => $sessionRepository->findAll(),
         ]);
@@ -91,4 +104,6 @@ class SessionController extends AbstractController
 
         return $this->redirectToRoute('session_index');
     }
+
+
 }

@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Edit User{% endblock %}
-{% if app.user.id == user.id or app.user.roles[0] == "ROLE_SUPER_ADMIN" %}
 {% block body %}
+{% if app.user.id == user.id or app.user.roles[0] == "ROLE_SUPER_ADMIN" %}
 <h1>Modification du Profile</h1>
 
 {{ include('user/_form.html.twig', {'button_label': 'Mise à jour'}) }}
@@ -10,7 +10,7 @@
 <a href="{{ path('user_index') }}">Liste users</a>
 
 {{ include('user/_delete_form.html.twig') }}
-{% endblock %}
 {% else %}
 <span style="color: red">Vous n'etes pas autoriser à modifier ou à supprimer à ce contenu..!</span>
 {% endif %}
+{% endblock %}

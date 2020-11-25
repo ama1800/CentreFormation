@@ -27,6 +27,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Email(message = "L'email '{{ value }}' n'est pas un email valide.")
      */
     private $email;
 
@@ -70,7 +71,8 @@ class User implements UserInterface
     private $dateNaissance;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
+     * @Assert\Length(max=5)
      */
     private $cp;
 
@@ -88,6 +90,16 @@ class User implements UserInterface
      * @ORM\ManyToMany(targetEntity=Categorie::class, inversedBy="users")
      */
     private $categories;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $activationToken;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $restToken;
 
     public function __construct()
     {
@@ -281,6 +293,30 @@ class User implements UserInterface
     public function removeCategory(Categorie $category): self
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    public function getActivationToken(): ?string
+    {
+        return $this->activationToken;
+    }
+
+    public function setActivationToken(?string $activationToken): self
+    {
+        $this->activationToken = $activationToken;
+
+        return $this;
+    }
+
+    public function getRestToken(): ?string
+    {
+        return $this->restToken;
+    }
+
+    public function setRestToken(?string $restToken): self
+    {
+        $this->restToken = $restToken;
 
         return $this;
     }

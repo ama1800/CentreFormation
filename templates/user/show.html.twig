@@ -10,7 +10,7 @@
   <div class="card-header text-danger">user ID: {{ user.id }}<br>
   </div>
   <div class="card-body text-success">
-    <h6 class="card-title">DATE DE NAISSANCE : {{ user.dateNaissance ? user.dateNaissance|date('d-m-Y') : '' }}</h6>
+    <h6 class="card-title">DATE DE NAISSANCE : {{ user.dateNaissance ? date().diff(date(user.dateNaissance)).y : '' }} Ans</h6>
     <p class="card-text">ADRESSE : <br>{{ user.adresse }}<br> {{ user.cp }}<br> {{ user.commune }}</p>
     <h6>{{user.email}}</h6>
   </div>
