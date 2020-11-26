@@ -34,24 +34,16 @@ class SessionType extends AbstractType
                 'choice_label' => 'libelle'
             ])
             ->add('stagiaires',CollectionType::class,[
-                'entry_type' => StagiaireType::class,
-                // 'allow_add' => true,
+                'entry_type' => EntityType::class,
+                'entry_options'=> [
+                    'class'=> Stagiaire::class,
+                    'choice_label' => 'nom'
+                ],
+                'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,        
                 'by_reference' => false
             ]);
-        $builder->get('stagiaires')->addEventListener(
-                FormEvents::SUBMIT,
-                function (FormEvent $event) 
-                {
-                    // dump($event->getForm()->getData());
-                    dump($event->getData());
-                    // foreach ($event->getData()->getStagiaires() as $stagiaire) 
-                    // {
-                    //     $stagiaire->setStagiaire($event->getData());
-                    // }
-                }
-            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -84,7 +84,10 @@ class Stagiaire
         $this->sessions = new ArrayCollection();
     }
 
-   
+   public function __toString()
+   {
+       return $this->nom;
+   }
 
     public function getId(): ?int
     {

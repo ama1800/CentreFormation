@@ -8,8 +8,11 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -32,13 +35,39 @@ class UserController extends AbstractController
      * @isGranted("ROLE_ADMINISTRATEUR")    
      * @Route("/new", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer): Response
+    public function new(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer, SluggerInterface $slugger): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // upload photo
+            /** @var UploadedFile $brochureFile */
+            $brochureFile = $form['brochure']->getData();
+            
+            if ($brochureFile) 
+            {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                    $e->getMessage();
+                }
+                // updates the 'photo' property to store the image file name
+                // instead of its contents
+                $user->setPhoto($newFilename);
+            }
+
             $hash= $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
             // Generer le token d'activation de compte
@@ -86,12 +115,38 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user, UserPasswordEncoderInterface $encoder ): Response
+    public function edit(Request $request, User $user, UserPasswordEncoderInterface $encoder,SluggerInterface $slugger ): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            // upload photo
+            /** @var UploadedFile $brochureFile */
+            $brochureFile = $form['brochure']->getData();
+            
+            if ($brochureFile) 
+            {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                    $e->getMessage();
+                }
+                // updates the 'photo' property to store the image file name
+                // instead of its contents
+                $user->setPhoto($newFilename);
+            }
             $hash= $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
             $this->getDoctrine()->getManager()->flush();

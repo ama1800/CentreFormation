@@ -15,18 +15,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  * @Route("/session")
  */
 class SessionController extends AbstractController
-{   
-    
-    /**
-    * @Route("/calendar", name="session_calendar", methods={"GET"})
-    */
-   public function calendar(SessionRepository $sessionRepository): Response
-   {
-       return $this->render('session/calendar.html.twig', [
-           'sessions' => $sessionRepository->findAll(),
-           ]);
-   }
-   
+{
+
     /**
      * @Route("/", name="session_index", methods={"GET"})
      */
@@ -39,12 +29,24 @@ class SessionController extends AbstractController
     }
 
     /**
+     * @Route("/calendar", name="session_calendar", methods={"GET"})
+     */
+    public function calendar(SessionRepository $sessionRepository): Response
+    {
+        $sessions=$sessionRepository->findAll();
+        // dd($sessions);
+        return $this->render('session/calendar.html.twig', [
+            'sessions' => $sessions,
+        ]);
+    }
+
+    /**
      * @Route("/new", name="session_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
         $session = new Session();
-        $form = $this->createForm(SessionType::class, $session);
+        $form = $this->createForm(SessionType::class, $session,['validation_groups'=>'session_prop']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -96,7 +98,7 @@ class SessionController extends AbstractController
      */
     public function delete(Request $request, Session $session): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$session->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $session->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($session);
             $entityManager->flush();
@@ -104,6 +106,4 @@ class SessionController extends AbstractController
 
         return $this->redirectToRoute('session_index');
     }
-
-
 }

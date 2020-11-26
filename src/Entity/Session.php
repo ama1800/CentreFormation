@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping\OrderBy;
 use App\Repository\SessionRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -18,21 +19,25 @@ class Session
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("session_prop")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("session_prop")
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups("session_prop")
      */
     private $startAt;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups("session_prop")
      */
     private $endAt;
 
@@ -49,6 +54,7 @@ class Session
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("session_prop")
      */
     private $photo;
 

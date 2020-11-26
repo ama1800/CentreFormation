@@ -3,55 +3,54 @@
 {% block title %}Stagiaire index{% endblock %}
 
 {% block body %}
-    <h1>Stagiaire index</h1>
-<pre>
-    {{ dump(stagiaires) }}
-</pre>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Cp</th>
-                <th>Commune</th>
-                <th>Adresse</th>
-                <th>Portable</th>
-                <th>Civilite</th>
-                <th>EnterAt</th>
-                <th>ExitAt</th>
-                <th>Photo</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for stagiaire in stagiaires %}
-            <tr>
-                <td>{{ stagiaire.id }}</td>
-                <td>{{ stagiaire.email }}</td>
-                <td>{{ stagiaire.nom }}</td>
-                <td>{{ stagiaire.prenom }}</td>
-                <td>{{ stagiaire.cp }}</td>
-                <td>{{ stagiaire.commune }}</td>
-                <td>{{ stagiaire.adresse }}</td>
-                <td>{{ stagiaire.portable }}</td>
-                <td>{{ stagiaire.civilite ? 'Yes' : 'No' }}</td>
-                <td>{{ stagiaire.enterAt ? stagiaire.enterAt|date('Y-m-d') : '' }}</td>
-                <td>{{ stagiaire.exitAt ? stagiaire.exitAt|date('Y-m-d') : '' }}</td>
-                <td>{{ stagiaire.photo }}</td>
-                <td>
-                    <a href="{{ path('stagiaire_show', {'id': stagiaire.id}) }}">show</a>
-                    <a href="{{ path('stagiaire_edit', {'id': stagiaire.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="13">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('stagiaire_new') }}">Create new</a>
+{% if is_granted("ROLE_RESPONSABLE") %}
+<h1>Stagiaires</h1>
+<a href="{{ path('stagiaire_new') }}">Nouveau Stagiaire</a>
+<div class="headforum">
+    <nav class="navbar navbar-inverse">
+        <table class="table">
+            <thead class="table-active">
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Adresse</th>
+                    <th>Portable</th>
+                    <th>Civilite</th>
+                    <th>Date Entrer</th>
+                    <th>Date Sortie</th>
+                    <th>Photo</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            {% for stagiaire in stagiaires %}
+            <tbody class="table-light">
+                <tr>
+                    <td><a href="{{ path('stagiaire_show', {'id': stagiaire.id }) }}">{{ stagiaire.nom }}
+                            {{ stagiaire.prenom }}</a></td>
+                    <td>{{ stagiaire.email }}</td>
+                    <td>
+                        <p>{{ stagiaire.adresse }}<br> {{ stagiaire.cp }}<br> {{ stagiaire.commune }}</p>
+                    </td>
+                    <td>{{ stagiaire.portable }}</td>
+                    <td>{{ stagiaire.civilite ? 'Homme' : 'Femme' }}</td>
+                    <td>{{ stagiaire.enterAt ? stagiaire.enterAt|date('d-m-Y') : '' }}</td>
+                    <td>{{ stagiaire.exitAt ? stagiaire.exitAt|date('d-m-Y') : '' }}</td>
+                    <td><img class="img-fluid" style="width: 60px; height:60px " src="{{ asset('uploads/' ~  stagiaire.photo) }}" alt="{{ stagiaire.nom}}" ></td>
+                    <td>
+                        <a href="{{ path('stagiaire_show', {'id': stagiaire.id}) }}">show</a>
+                        <a href="{{ path('stagiaire_edit', {'id': stagiaire.id}) }}">edit</a>
+                    </td>
+                </tr>
+            </tbody>
+            {% else %}
+            <tbody class="table table-striped table-dark">
+                <tr>
+                    <td colspan="13">no records found</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </nav>
+</div>
+{% endif %}
 {% endblock %}

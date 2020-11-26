@@ -12,8 +12,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CalendarListener
 {
-   private $sessionRepository;
-   private $router;
+   public $sessionRepository;
+   public $router;
 
     public function __construct(
         SessionRepository $sessionRepository,
@@ -46,8 +46,8 @@ class CalendarListener
             ->where('session.startAt BETWEEN :start and :end') 
             ->orWhere('session.endAt BETWEEN :start and :end')
             ->orWhere(':end BETWEEN session.startAt and session.endAt')
-            ->setParameter('start', $start->format('d-m-Y'))
-            ->setParameter('end', $end->format('d-m-Y'))
+            ->setParameter('start', $start->format('Y-m-d H:i:s'))
+            ->setParameter('end', $end->format('Y-m-d H:i:s'))
             ->getQuery()
             ->getResult() ;
         // }
@@ -68,10 +68,10 @@ class CalendarListener
              * and: https://github.com/fullcalendar/fullcalendar/blob/master/src/core/options.ts
              */
 
-            $sessionEvent->setOptions([
-                'backgroundColor' => 'red',
-                'borderColor' => 'red',
-            ]);
+            // $sessionEvent->setOptions([
+            //     'backgroundColor' => 'red',
+            //     'borderColor' => 'red',
+            // ]);
             $sessionEvent->addOption(
                 'url',
                 $this->router->generate('session_show', [

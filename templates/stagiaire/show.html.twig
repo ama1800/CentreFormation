@@ -53,7 +53,8 @@
             </tr>
             <tr>
                 <th>Photo</th>
-                <td>{{ stagiaire.photo }}</td>
+                <td><img class="img-fluid" src="{{ asset('uploads/' ~  stagiaire.photo) }}" alt="{{ stagiaire.nom}}" ></td>
+                <td>
             </tr>
         </tbody>
     </table>

@@ -19,12 +19,14 @@
                     <th>actions</th>
                 </tr>
             </thead>
-    {% for session in sessions %}
+            {% for session in sessions %}
             <tbody class="table-light">
                 <tr>
                     <td><a href="{{ path('formation_show', {'id': session.id}) }}">{{ session.libelle }}</a></td>
-                    <td><a href="{{ path('categorie_show', {'id': session.formation.id}) }}">{{ session.formation.libelle }}</a></td>
-                    
+                    <td><a
+                            href="{{ path('categorie_show', {'id': session.formation.id}) }}">{{ session.formation.libelle }}</a>
+                    </td>
+
                     <td>{{ session.startAt ? session.startAt|date('d-m-Y') : '' }}</td>
                     <td>{{ session.endAt ? session.endAt|date('d-m-Y') : '' }}</td>
                     <td>
@@ -32,11 +34,11 @@
                         <a href="{{ path('session_edit', {'id': session.id}) }}">edit</a>
                     </td>
                 </tr>
-            {% else %}
+                {% else %}
                 <tr>
                     <td colspan="5">no records found</td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
     </nav>

@@ -1,17 +1,40 @@
- /* accordion */
- var acc = document.getElementsByClassName("accordion");
- for (let i = 0; i < acc.length; i++) 
- {
-   acc[i].addEventListener("click", function() {
-     this.classList.toggle("actuel");
-     var text = this.nextElementSibling;
-     if (text.style.display === "block") {
-        text.style.display = "none";
-     } else {
-        text.style.display = "block";
-     }
-   });
- }
+/* accordion */
+var acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function () {
+    this.classList.toggle("actuel");
+    var text = this.nextElementSibling;
+    if (text.style.display === "block") {
+      text.style.display = "none";
+    } else {
+      text.style.display = "block";
+    }
+  });
+}
+/** CollectionType*/
+
+  jQuery(document).ready(function () {
+    jQuery('.add-another-collection-widget').click(function (e) {
+        var list = jQuery(jQuery(this).attr('data-list-selector'));
+        // Try to find the counter of the list or use the length of the list
+        var counter = list.data('widget-counter') || list.children().length;
+
+        // grab the prototype template
+        var newWidget = list.attr('data-prototype');
+        // replace the "__name__" used in the id and name of the prototype
+        // with a number that's unique to your emails
+        // end name attribute looks like name="contact[emails][2]"
+        newWidget = newWidget.replace(/__name__/g, counter);
+        // Increase the counter
+        counter++;
+        // And store it, the length cannot be used if deleting widgets is allowed
+        list.data('widget-counter', counter);
+
+        // create a new list element and add it to the list
+        var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+        newElem.appendTo(list);
+    });
+});
  /* calendrier */
 //  document.addEventListener('DOMContentLoaded', () => 
 //  {
@@ -43,17 +66,17 @@
 //   calendar.render();
 // });
 //  /* ZipCode */
-// $(document).ready(function () {
+// jQuery(document).ready(function () {
 //     const comUrl = "https://geo.api.gouv.fr/communes?codePostal="
 //     const adressUrl = "https://api-adresse.data.gouv.fr/search/?q="//8+bd+du+port&postcode=44380
 //     const format = "&format=json"
 //     let nom = "";
-//     let cp = $('#cp')
-//     let ville = $('#ville')
-//     let adresse = $('#adresse')
-//     let adresses = $('#adresses')
-//     $(cp).on('blur', function () {
-//         let code = $(this).val()
+//     let cp = jQuery('#cp')
+//     let ville = jQuery('#ville')
+//     let adresse = jQuery('#adresse')
+//     let adresses = jQuery('#adresses')
+//     jQuery(cp).on('blur', function () {
+//         let code = jQuery(this).val()
 //         let url = comUrl + code + format
 //         // console.log(url)
 //         fetch(
@@ -61,10 +84,10 @@
 //             { method: 'get' }).then(response => response.json()).then(results => {
 //                 // console.log(results)
 //                 if (results.length) {
-//                     $.each(results, function (k, v) {
+//                     jQuery.each(results, function (k, v) {
 //                         // console.log(v)
 //                         // console.log(v.nom)
-//                         $(ville).append('<option value="' + v.nom + '">' + v.nom + '</option>')
+//                         jQuery(ville).append('<option value="' + v.nom + '">' + v.nom + '</option>')
 //                     })
 //                 }
 //             }).catch(err => {
@@ -73,10 +96,10 @@
 //     })
 
 //     /** Adresse */
-//     // $(cp).on('blur', function () {
-//         $(adresse).on('keypress', function () {
-//             let code = $(cp).val()
-//             let nom = $(this).val().split('')
+//     // jQuery(cp).on('blur', function () {
+//         jQuery(adresse).on('keypress', function () {
+//             let code = jQuery(cp).val()
+//             let nom = jQuery(this).val().split('')
 //             let part = ""
 //             for (let i = 0; i < nom.length; i++) {
 //                     part += nom[i]
@@ -88,26 +111,26 @@
 //                     { method: 'get' }).then(response => response.json()).then(results => {
 //                         console.log(results.features)
 //                         if (results.features) {
-//                             // $.each(results.features, function (k, v) {
+//                             // jQuery.each(results.features, function (k, v) {
 //                             //     let ve = v['properties']
-//                             //     $.each(ve, function (ke, va) {
+//                             //     jQuery.each(ve, function (ke, va) {
 //                             //         if (ke == 'name') {
 //                             //             // console.log(va)
-//                             //             $(adresses).append('<option class="resultat" value="' + va + '">' + va + '</option>')
-//                             //             // $('.resultat').val("")
+//                             //             jQuery(adresses).append('<option class="resultat" value="' + va + '">' + va + '</option>')
+//                             //             // jQuery('.resultat').val("")
 //                             //         }
 //                             //     })
 //                             // })
 //                             let data = results.features
 //                             data.forEach((adresse) => {
-//                                 document.querySelector('#adresses').innerHTML += `<option value="${adresse.properties.name}">`
+//                                 document.querySelector('#adresses').innerHTML += `<option value="jQuery{adresse.properties.name}">`
 //                             })
 //                         }
 //                     }).catch(err => {
 //                         console.log(err)
 //                 })
 //             }
-                
+
 //             }
 //         })
 //     })
@@ -127,26 +150,26 @@
 // /**
 //  API grv des meteo
 //  */
-// let divMeteo = $('#meteo')
-// let commune=$('#commune')
-// let met= $('.met')
+// let divMeteo = jQuery('#meteo')
+// let commune=jQuery('#commune')
+// let met= jQuery('.met')
 // let urlMeteo = "https://api.meteo-concept.com/api/forecast/daily?token=252724d997e784c487b348613a6faf2ed719bdf72fa2ed845eba772b5192e80d&insee=67482"
 // fetch(
 //     urlMeteo,
 //     { method: 'get' }).then(response => response.json()).then(results => {
 //         let location = results.city.name
-//         $(document).ready(function(){
-//             $(commune).html= location
+//         jQuery(document).ready(function(){
+//             jQuery(commune).html= location
 //         })
 //         let tab = results.forecast
 //         console.log(tab)
-//         $.each(tab, function (k, v) {
+//         jQuery.each(tab, function (k, v) {
 //             for (let i = 0; i < tab.length; i++) {
 //                 let heur = v.datetime
 //                 let heure = heur[i]
 //                 for(let j=0; j<=heure;j+=24){
 //                     let heures=heure[j]
-//                 $(met).append('<option class="resultat" value="' + heures + '">' + heures + '</option>')
+//                 jQuery(met).append('<option class="resultat" value="' + heures + '">' + heures + '</option>')
 //                 }
 //             }
 //         })

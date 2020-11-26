@@ -4,9 +4,19 @@
 
 {% block body %}
 
-    <h1>Créer nouvelle session</h1>
+<h1>Créer nouvelle session</h1>
+<pre>
+    {{ dump(form) }}
+</pre>
+{{ include('session/_form.html.twig') }}
 
-    {{ include('session/_form.html.twig') }}
-
+<ul 
+    {% for stagiaireField in form.stagiaires %}
+    <li>
+        {{ form_errors(stagiaireField) }}
+        {{ form_widget(stagiaireField) }}
+    </li>
+    {% endfor %}
+    </ul>
     <a href="{{ path('session_index') }}">Page Des Sessions</a>
-{% endblock %}
+    {% endblock %}
