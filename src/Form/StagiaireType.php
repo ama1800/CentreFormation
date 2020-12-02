@@ -2,10 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\Session;
 use App\Entity\Stagiaire;
 use App\Form\SessionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -29,9 +31,13 @@ class StagiaireType extends AbstractType
             ->add('commune', TextType::class)
             ->add('adresse', TextType::class)
             ->add('portable',TelType::class)
-            ->add('civilite', CheckboxType::class, [
-                'label'    => 'Mr',
-                'required' => false,
+            ->add('civilite', ChoiceType::class, [
+                'required' => true,
+                'attr'=> ['class'=> 'selectpicker',],
+                'choices'  => [
+                    'MONSIEUR' =>  'NO',
+                    'MADAME' =>  'YES',
+                ],
             ])
             ->add('enterAt',DateType::class, [
                 'widget' => 'single_text',
@@ -61,14 +67,14 @@ class StagiaireType extends AbstractType
                     ])
                 ],
             ])
-            ->add('sessions',CollectionType::class,[
-                'entry_type' => SessionType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,        
-                'by_reference' => false
-            ])
-        ;
+            ->add('sessions',EntityType::class,[
+                'class'=>  Session::class ,
+                'attr'=> ['class'=> 'selectpicker'],
+                'multiple'=> true,
+                'choice_label'=> function($session){
+                   return $session->getLibelle();
+                }
+            ]);
     }
     /**
      * {@inheritdoc}

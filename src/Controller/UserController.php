@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @isGranted("ROLE_USER")
+ * @isGranted("ROLE_SECRITARIAT")
  * @Route("/user")
  */
 class UserController extends AbstractController

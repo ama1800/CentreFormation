@@ -7,6 +7,7 @@ use App\Entity\Module;
 use App\Form\EspaceType;
 use App\Entity\Categorie;
 use App\Entity\Formation;
+use App\Entity\Session;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -28,6 +29,14 @@ class FormationType extends AbstractType
                 'class' => Categorie::class,
                 'choice_label' => 'libelle'
             ])
+            // ->add('sessions', EntityType::class, [
+            //     'class'=>  Session::class ,
+            //     'attr'=> ['class'=> 'selectpicker'],
+            //     'multiple'=> true,
+            //     'choice_label'=> function($session){
+            //        return $session->getLibelle();
+            //     }
+            // ])
             ->add('brochure', FileType::class, [
                 'label' => 'Photo',
                 // unmapped means that this field is not associated to any entity property
@@ -51,15 +60,6 @@ class FormationType extends AbstractType
                 ],
             ])
             ;
-            
-        // $builder
-        //     ->add('espaces',CollectionType::class, [
-        //         'entry_type' => EspaceType::class,        
-        //         'allow_add' => true,
-        //         'allow_delete' => true,
-        //         'prototype' => true,
-        //         'by_reference' => false
-        //     ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

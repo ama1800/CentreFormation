@@ -113,7 +113,7 @@ class User implements UserInterface
 
     public function __toString()
     {
-        // $this->nom.''.$this->prenom.''.$this->email;
+        $this->getNom().''.$this->getPrenom().''.$this->getEmail();
     }
 
     public function getId(): ?int

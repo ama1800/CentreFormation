@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @isGranted("ROLE_RESPONSABLE")
+ * @isGranted("ROLE_USER")
  * @Route("/categorie")
  */
 class CategorieController extends AbstractController
@@ -28,6 +28,7 @@ class CategorieController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_ADMINISTRATEUR")
      * @Route("/new", name="categorie_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -82,6 +83,7 @@ class CategorieController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_ADMINISTRATEUR")
      * @Route("/{id}", name="categorie_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Categorie $categorie): Response

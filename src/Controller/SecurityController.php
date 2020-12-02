@@ -21,8 +21,13 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        if ($this->getUser()) {
-            return $this->redirectToRoute('session_index');
+        if ($this->getUser()) 
+        {
+            if($this->getUser()->getActivationToken() != null)
+            {
+                $this->addFlash('danger', 'Votre compte n\'est toujours pas active, veuillez consulter votre boite email et cliquer sur le lien d\'activation. Merci');
+            }
+            return $this->redirectToRoute('/');
         }
 
         // get the login error if there is one
@@ -39,7 +44,7 @@ class SecurityController extends AbstractController
     public function logout()
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.'); 
-        return $this->redirectToRoute('formation_index');
+        return $this->redirectToRoute('home');
     }
 
     /**
@@ -89,7 +94,7 @@ class SecurityController extends AbstractController
         <span>Bonjour,</span><p> vous avez oublier votre mot de passe, vous pouvez le réinitiliser en suivant le lien si dessous.
         Le lien de réinitialisation est disponible pour une duree de 4 heures, dépasser les 4 heures vous devez refaire une autre demande pour pouvoir réinitialiser votre mot de passe.
         Cordialement.
-        Votre lien de réinitialisation de votre mot de passe <a href="'.$url.'"</a></p>',
+        Pour la réinitialisation de votre mot de passe <a href="'.$url.'">Suivez ce lien</a></p>',
         'taxt/html');
         //  Envoie du message
         $mailer->send($message);
@@ -149,8 +154,6 @@ class SecurityController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
-
-
         return $this->render('user/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),

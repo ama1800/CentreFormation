@@ -4,9 +4,10 @@
 
 {% block body %}
 <h1>Session index</h1>
-
-<a href="{{ path('session_new') }}">Nouvelle Session</a>
-
+<div style="display: flex; ">
+    <a style="margin-right: 5px;" href="{{ path('session_new') }}"><button>Nouvelle Session</button></a><br>
+    <a href="{{ path('session_calendar') }}"><button>Calendrier des Sessions</button></a>
+</div>
 <div class="headforum">
     <nav class="navbar navbar-inverse">
         <table class="table">
@@ -22,9 +23,9 @@
             {% for session in sessions %}
             <tbody class="table-light">
                 <tr>
-                    <td><a href="{{ path('formation_show', {'id': session.id}) }}">{{ session.libelle }}</a></td>
+                    <td><a href="{{ path('session_show', {'id': session.id}) }}">{{ session.libelle }}</a></td>
                     <td><a
-                            href="{{ path('categorie_show', {'id': session.formation.id}) }}">{{ session.formation.libelle }}</a>
+                            href="{{ path('formation_show', {'id': session.formation.id}) }}">{{ session.formation.libelle }}</a>
                     </td>
 
                     <td>{{ session.startAt ? session.startAt|date('d-m-Y') : '' }}</td>

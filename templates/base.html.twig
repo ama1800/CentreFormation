@@ -28,7 +28,10 @@
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="{{ path('categorie_index')}}">ACCEUIL</a>
+                            <a class="nav-link" href="{{ path('home')}}">ACCEUIL</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ path('categorie_index')}}">Categorie</a>
                         </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="{{ path('formation_index')}}">Nos Formations</a>
@@ -45,11 +48,13 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="{{ path('module_index')}}">Modules</a>
                         </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ path('session_calendar')}}">Calendrier</a>
+                        </li>
                     </ul>
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                    </form>
+                    <div class="container">
+                        {{ render(controller('App\\Controller\\SearchController::searchBar'))}}
+                    </div>
                     <div class="security">
                         {% if not app.user %}
                         <div> <a class="btn1" href="{{path('app_login')}}"><button
@@ -58,7 +63,7 @@
                         <div><span style="color: white">Vous etes Connecter:
                                 {{ app.user.civilite ? 'Monsieur' : 'Madame' }} </span><a class="user"
                                 href="{{path('user_show',{'id': app.user.Id})}}">{{app.user.nom}} </a></div>
-                        <div> <a class="btn-deconnexion" href="{{path('user_show',{'id': app.user.Id})}}"><button
+                        <div> <a class="btn-deconnexion" href="{{path('profile',{'id': app.user.Id})}}"><button
                                     class="btn btn-primary">Profile</button></a></div>
                         <div> <a class="btn-deconnexion" href="{{path('app_logout')}}"><button
                                     class="btn btn-primary">Déconnexion</button></a></div>

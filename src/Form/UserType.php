@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Categorie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,7 +22,6 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $civilite = [0 => 'Madame', 1 => 'Monsieur'];
         $builder
             ->add('email', EmailType::class, [
                 'constraints' => [
@@ -30,8 +31,8 @@ class UserType extends AbstractType
                 ]
             ])
             ->add('roles', ChoiceType::class, [
-                'label' => 'Le Role : ',
                 'required' => false,
+                'attr'=> ['class'=> 'selectpicker',],
                 'choices'  => [
                     'EMPLOYE' =>  'ROLE_USER',
                     'SECRITAIRE' =>  'ROLE_SECRITARIAT',
@@ -39,16 +40,19 @@ class UserType extends AbstractType
                     'RESPONSABLE' => 'ROLE_RESPONSABLE',
                     'ADMINISTRATEUR' =>  'ROLE_ADMINISTRATEUR',
                 ],
-                'expanded' => true,
                 'multiple' => true,
             ])
             ->add('password', PasswordType::class)
             ->add('confirm_password', PasswordType::class)
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
-            ->add('civilite', CheckboxType::class, [
-                'label'    => 'A cocher si c\'est un homme',
-                'required' => false,
+            ->add('civilite', ChoiceType::class, [
+                'required' => true,
+                'attr'=> ['class'=> 'selectpicker',],
+                'choices'  => [
+                    'MONSIEUR' =>  'NO',
+                    'MADAME' =>  'YES',
+                ],
             ])
             ->add('dateNaissance', DateType::class, [
                 'widget' => 'single_text',
@@ -56,7 +60,12 @@ class UserType extends AbstractType
             ->add('cp', TextType::class)
             ->add('commune', TextType::class)
             ->add('adresse', TextType::class)
-            
+            ->add('categories', EntityType::class,[
+                'class'=>  Categorie::class ,
+                'attr'=> ['class'=> 'selectpicker'],
+                'multiple'=> true,
+                'choice_label'=> 'libelle'
+            ])
             ->add('brochure', FileType::class, [
                 'label' => 'Photo',
                 // unmapped means that this field is not associated to any entity property

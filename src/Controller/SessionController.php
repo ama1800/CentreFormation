@@ -9,9 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
+ * @isGranted("ROLE_SECRITARIAT")
  * @Route("/session")
  */
 class SessionController extends AbstractController
@@ -31,13 +33,10 @@ class SessionController extends AbstractController
     /**
      * @Route("/calendar", name="session_calendar", methods={"GET"})
      */
-    public function calendar(SessionRepository $sessionRepository): Response
+    public function calendar()
     {
-        $sessions=$sessionRepository->findAll();
-        // dd($sessions);
-        return $this->render('session/calendar.html.twig', [
-            'sessions' => $sessions,
-        ]);
+        return $this->render('session/calendar.html.twig'
+        );
     }
 
     /**

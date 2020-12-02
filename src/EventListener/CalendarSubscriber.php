@@ -4,23 +4,23 @@ namespace App\EventListener;
 
 
 use CalendarBundle\Entity\Event;
-use CalendarBundle\CalendarEvents;
 use App\Repository\SessionRepository;
 use CalendarBundle\Event\CalendarEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CalendarListener
 {
-   public $sessionRepository;
-   public $router;
+   private $router; 
+   private $repo;
+
 
     public function __construct(
-        SessionRepository $sessionRepository,
-        UrlGeneratorInterface $router
+    SessionRepository $repo,
+    UrlGeneratorInterface $router
     ) {
-        $this->sessionRepository = $sessionRepository;
         $this->router = $router;
+        $this->repo = $repo;
+
     }
 
     // public static function getSubscribedEvents()
@@ -40,12 +40,13 @@ class CalendarListener
         // Change session.beginAt by your start date property
         // if(array_key_exists('session', $filters))
         // {
+            // $repo= $sessionRepository->findAll();
             
-        $sessions = $this->sessionRepository
-            ->createQueryBuilder('session')
-            ->where('session.startAt BETWEEN :start and :end') 
-            ->orWhere('session.endAt BETWEEN :start and :end')
-            ->orWhere(':end BETWEEN session.startAt and session.endAt')
+        $sessions = $this->repo
+            ->createQueryBuilder('s')
+            ->where('s.startAt BETWEEN :start and :end') 
+            ->orWhere('s.endAt BETWEEN :start and :end')
+            ->orWhere(':end BETWEEN s.startAt and s.endAt')
             ->setParameter('start', $start->format('Y-m-d H:i:s'))
             ->setParameter('end', $end->format('Y-m-d H:i:s'))
             ->getQuery()
@@ -71,6 +72,7 @@ class CalendarListener
             // $sessionEvent->setOptions([
             //     'backgroundColor' => 'red',
             //     'borderColor' => 'red',
+            //     'display'=> 'grid'
             // ]);
             $sessionEvent->addOption(
                 'url',

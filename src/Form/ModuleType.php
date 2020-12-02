@@ -20,7 +20,9 @@ class ModuleType extends AbstractType
             ->add('description', TextareaType::class)
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
-                'choice_label' => 'libelle'
+                'choice_label' => function ($categorie){
+                    return $categorie->getLibelle();
+                }
             ])
         ;
     }

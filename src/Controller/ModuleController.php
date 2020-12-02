@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/module")
@@ -16,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ModuleController extends AbstractController
 {
     /**
+     * @isGranted("ROLE_SECRITARIAT")
      * @Route("/", name="module_index", methods={"GET"})
      */
     public function index(ModuleRepository $moduleRepository): Response
@@ -26,6 +28,7 @@ class ModuleController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_RESPONSABLE")
      * @Route("/new", name="module_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -59,6 +62,7 @@ class ModuleController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_RESPONSABLE")
      * @Route("/{id}/edit", name="module_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Module $module): Response
@@ -79,6 +83,7 @@ class ModuleController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_RESPONSABLE")
      * @Route("/{id}", name="module_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Module $module): Response

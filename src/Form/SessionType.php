@@ -21,6 +21,16 @@ class SessionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventListener(
+                FormEvents::POST_SUBMIT,
+                function (FormEvent $event) {
+                    
+                    foreach ($event->getData()->getStagiaires() as $stagiaire) {
+                        $stagiaire->addSession($event->getData());
+                    }
+                    
+                }
+            );
         $builder
             ->add('libelle', TextType::class)
             ->add('startAt', DateType::class, [
@@ -33,16 +43,13 @@ class SessionType extends AbstractType
                 'class' => Formation::class,
                 'choice_label' => 'libelle'
             ])
-            ->add('stagiaires',CollectionType::class,[
-                'entry_type' => EntityType::class,
-                'entry_options'=> [
-                    'class'=> Stagiaire::class,
-                    'choice_label' => 'nom'
-                ],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,        
-                'by_reference' => false
+            ->add('stagiaires',EntityType::class,[
+                'class'=>  Stagiaire::class ,
+                'attr'=> ['class'=> 'selectpicker'],
+                'multiple'=> true,
+                'choice_label'=> function($stagiaire){
+                   return $stagiaire->getNom()." ".$stagiaire->getPrenom();
+                }
             ]);
     }
 

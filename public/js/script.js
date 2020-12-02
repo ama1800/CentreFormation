@@ -13,29 +13,65 @@ for (let i = 0; i < acc.length; i++) {
 }
 /** CollectionType*/
 
-  jQuery(document).ready(function () {
-    jQuery('.add-another-collection-widget').click(function (e) {
-        var list = jQuery(jQuery(this).attr('data-list-selector'));
-        // Try to find the counter of the list or use the length of the list
-        var counter = list.data('widget-counter') || list.children().length;
+    //création de 3 éléments HTMLElement    
+    var $addCollectionButton = $('<button type="button" class="add_collection_link">Ajouter Module</button>');
+    var $delCollectionButton = $('<button type="button" class="del_collection_link">Supprimer</button>');
+    //le premier élément li de la liste (celui qui contient le bouton 'ajouter')
+    var $newLinkLi = $('<li></li>').append($addCollectionButton);
+    
+    function generateDeleteButton(){
+        var $btn = $delCollectionButton.clone();
+        $btn.on("click", function(){//événement clic du bouton supprimer
+            $(this).parent("li").remove();
+            $collection.data('index', $collection.data('index')-1)
+        })
+        return $btn;
+    }
+    //fonction qui ajoute un nouveau champ li (en fonction de l'entry_type du collectionType) dans la collection
+    function addCollectionForm($collection, $newLinkLi) {
+        
+        //contenu du data attribute prototype qui contient le HTML d'un champ
+        var newForm = $collection.data('prototype');
+        //le nombre de champs déjà présents dans la collection
+        var index = $collection.data('index');
+        //on remplace l'emplacement prévu pour l'id d'un champ par son index dans la collection
+        newForm = newForm.replace(/__name__/g, index);
+        //on modifie le data index de la collection par le nouveau nombre d'éléments
+        $collection.data('index', index+1);
 
-        // grab the prototype template
-        var newWidget = list.attr('data-prototype');
-        // replace the "__name__" used in the id and name of the prototype
-        // with a number that's unique to your emails
-        // end name attribute looks like name="contact[emails][2]"
-        newWidget = newWidget.replace(/__name__/g, counter);
-        // Increase the counter
-        counter++;
-        // And store it, the length cannot be used if deleting widgets is allowed
-        list.data('widget-counter', counter);
+        //on construit l'élément li avec le champ et le bouton supprimer
+        var $newFormLi = $('<li></li>').append(newForm).append(generateDeleteButton());
+        //on ajoute la nouvelle li au dessus de celle qui contient le bouton "ajouter"
+        $newLinkLi.before($newFormLi);
+    }
+    //rendu de la collection au chargement de la page
+    $(document).ready(function() {
+        //on pointe la liste complete (le conteneur de la collection)
+        var $collection = $("ul#gestionDurees")
+        //on y ajoute le bouton ajouter (à la fin du contenu)
+        $collection.append($newLinkLi);
 
-        // create a new list element and add it to the list
-        var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
-        newElem.appendTo(list);
+        //pour chaque li déjà présente dans la collection (dans le cas d'une modification)
+        $(".gestionDuree").each(function(){
+            //on génère et ajoute un bouton "supprimer"
+            $(this).append(generateDeleteButton());
+        })
+        //le data index de la collection est égal au nombre de input à l'intérieur
+        $collection.data('index', $collection.find(':input').length);
+        $addCollectionButton.on('click', function(e) { // au clic sur le bouton ajouter
+            //si la collection n'a pas encore autant d'élément que le maximum autorisé
+            //if($collection.data('index') <= $("input[maxNb]").val()){
+                //on appelle la fonction qui ajoute un nouveau champ
+                addCollectionForm($collection, $newLinkLi);
+            //}
+            //else alert("Nb max atteint !")
+        });
+
     });
-});
- /* calendrier */
+
+
+
+/* calendrier */
 //  document.addEventListener('DOMContentLoaded', () => 
 //  {
 //   var calendarEl = document.getElementById('calendar-holder');
@@ -65,76 +101,69 @@ for (let i = 0; i < acc.length; i++) {
 //   });
 //   calendar.render();
 // });
-//  /* ZipCode */
-// jQuery(document).ready(function () {
-//     const comUrl = "https://geo.api.gouv.fr/communes?codePostal="
-//     const adressUrl = "https://api-adresse.data.gouv.fr/search/?q="//8+bd+du+port&postcode=44380
-//     const format = "&format=json"
-//     let nom = "";
-//     let cp = jQuery('#cp')
-//     let ville = jQuery('#ville')
-//     let adresse = jQuery('#adresse')
-//     let adresses = jQuery('#adresses')
-//     jQuery(cp).on('blur', function () {
-//         let code = jQuery(this).val()
-//         let url = comUrl + code + format
-//         // console.log(url)
-//         fetch(
-//             url,
-//             { method: 'get' }).then(response => response.json()).then(results => {
-//                 // console.log(results)
-//                 if (results.length) {
-//                     jQuery.each(results, function (k, v) {
-//                         // console.log(v)
-//                         // console.log(v.nom)
-//                         jQuery(ville).append('<option value="' + v.nom + '">' + v.nom + '</option>')
-//                     })
-//                 }
-//             }).catch(err => {
-//                 console.log(err)
-//             })
-//     })
+/* ZipCode */
 
-//     /** Adresse */
-//     // jQuery(cp).on('blur', function () {
-//         jQuery(adresse).on('keypress', function () {
-//             let code = jQuery(cp).val()
-//             let nom = jQuery(this).val().split('')
-//             let part = ""
-//             for (let i = 0; i < nom.length; i++) {
-//                     part += nom[i]
-//                 if(part.length>=1){
-//                 let urlAdresse = adressUrl + part + "&postcode=" + code + format
-//                 console.log(urlAdresse)
-//                 fetch(
-//                     urlAdresse,
-//                     { method: 'get' }).then(response => response.json()).then(results => {
-//                         console.log(results.features)
-//                         if (results.features) {
-//                             // jQuery.each(results.features, function (k, v) {
-//                             //     let ve = v['properties']
-//                             //     jQuery.each(ve, function (ke, va) {
-//                             //         if (ke == 'name') {
-//                             //             // console.log(va)
-//                             //             jQuery(adresses).append('<option class="resultat" value="' + va + '">' + va + '</option>')
-//                             //             // jQuery('.resultat').val("")
-//                             //         }
-//                             //     })
-//                             // })
-//                             let data = results.features
-//                             data.forEach((adresse) => {
-//                                 document.querySelector('#adresses').innerHTML += `<option value="jQuery{adresse.properties.name}">`
-//                             })
-//                         }
-//                     }).catch(err => {
-//                         console.log(err)
-//                 })
-//             }
+$(document).ready(function () {
+  const comUrl = "https://geo.api.gouv.fr/communes?codePostal="
+  const adressUrl = "https://api-adresse.data.gouv.fr/search/?q="//8+bd+du+port&postcode=44380
+  const format = "&format=json"
+  let nom = "";
+  let cp = $('#user_cp')
+  let ville = $('#user_commune')
+  let adresse = $('#user_adresse')
+  let adresses = $('#adresses')
+  $(cp).on('blur', function () {
+    let code = $(this).val()
+    let url = comUrl + code + format
+    console.log(url)
+    fetch(
+      url,
+      { method: 'get' }).then(response => response.json()).then(results => {
+        // console.log(results)
+        if (results.length) {
+          $.each(results, function (k, v) {
+            // console.log(v)
+            // console.log(v.nom)
+            $(ville).append('<option value="' + v.nom + '">' + v.nom + '</option>')
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+  })
 
-//             }
-//         })
-//     })
-// // });
+  /** Adresse */
+  // $(cp).on('blur', function () {
+  setTimeout(function () {
+    $(adresse).on('input', function () {
+      let code = $(cp).val()
+      let nom = $(this).val().split('')
+      let part = ""
+      for (let i = 0; i < nom.length; i++) {
+        part += nom[i]
+        if (part.length >= 1) {
+          let urlAdresse = adressUrl + part + "&postcode=" + code + format
+          console.log(urlAdresse)
+          fetch(
+            urlAdresse,
+            { method: 'get' }).then(response => response.json()).then(results => {
+              console.log(results.features)
+              if (results.features) {
+                let data = results.features
+                data.forEach((adresse) => {
+                  document.querySelector('#adresses').innerHTML += `<option value="${adresse.properties.name}">`
+                })
+              }
+            }).catch(err => {
+              console.log(err)
+            })
+        }
+
+      }
+    })
+  })
+}, 0);
+// });
 
 // /** modifier password */
 // let pass = document.getElementById("editPass")
@@ -150,26 +179,26 @@ for (let i = 0; i < acc.length; i++) {
 // /**
 //  API grv des meteo
 //  */
-// let divMeteo = jQuery('#meteo')
-// let commune=jQuery('#commune')
-// let met= jQuery('.met')
+// let divMeteo = $('#meteo')
+// let commune=$('#commune')
+// let met= $('.met')
 // let urlMeteo = "https://api.meteo-concept.com/api/forecast/daily?token=252724d997e784c487b348613a6faf2ed719bdf72fa2ed845eba772b5192e80d&insee=67482"
 // fetch(
 //     urlMeteo,
 //     { method: 'get' }).then(response => response.json()).then(results => {
 //         let location = results.city.name
-//         jQuery(document).ready(function(){
-//             jQuery(commune).html= location
+//         $(document).ready(function(){
+//             $(commune).html= location
 //         })
 //         let tab = results.forecast
 //         console.log(tab)
-//         jQuery.each(tab, function (k, v) {
+//         $.each(tab, function (k, v) {
 //             for (let i = 0; i < tab.length; i++) {
 //                 let heur = v.datetime
 //                 let heure = heur[i]
 //                 for(let j=0; j<=heure;j+=24){
 //                     let heures=heure[j]
-//                 jQuery(met).append('<option class="resultat" value="' + heures + '">' + heures + '</option>')
+//                 $(met).append('<option class="resultat" value="' + heures + '">' + heures + '</option>')
 //                 }
 //             }
 //         })

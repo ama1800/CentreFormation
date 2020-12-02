@@ -12,3 +12,8 @@
 <span style="color: red">Vous n'etes pas autoriser à créer un compte..!</span>
 {% endif %}
 {% endblock %}
+{% block javascripts %}
+{{ parent()}}
+<script src="/js/script.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{% endblock %}

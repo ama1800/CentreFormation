@@ -18,12 +18,20 @@ class EspaceType extends AbstractType
         $builder
             ->add('duree', IntegerType::class)
             ->add('formation',EntityType::class, [
-                'class' => Formation::class,
-                'choice_label' => 'libelle'
+                'class'=>  Formation::class ,
+                'attr'=> ['class'=> 'selectpicker'],
+                'multiple'=> false,
+                'choice_label'=> function($formation){
+                   return $formation->getLibelle();
+                }
             ])
             ->add('module',EntityType::class, [
-                'class' => Module::class,
-                'choice_label' => 'libelle'
+                'class'=>  Module::class ,
+                'attr'=> ['class'=> 'selectpicker'],
+                'multiple'=> false,
+                'choice_label'=> function($module){
+                   return $module->getLibelle();
+                }
             ])
         ;
     }

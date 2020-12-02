@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 /**
- * @isGranted("ROLE_SECRITARIAT")
+ * @isGranted("ROLE_FORMATTEUR")
  * @Route("/stagiaire")
  */
 class StagiaireController extends AbstractController

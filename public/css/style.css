@@ -4,7 +4,7 @@
 }
 body
 {
-    background-color: lightblue;
+    background-color: tan;
 }
 #logo
 {
@@ -109,4 +109,19 @@ background-color:lightblue;
 }
 blockquote{
 	margin: 0;
+}
+.container{
+	position: absolute;
+	right: 0;
+	top: 40%;
+}
+#form{
+	display: flex;
+}
+.example-wrapper{
+	display: flex;
+	justify-content: space-around;
+}
+.example-wrapper>div{
+	width: 30%;
 }
