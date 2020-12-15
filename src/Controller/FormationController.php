@@ -2,21 +2,26 @@
 
 namespace App\Controller;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\Espace;
-use App\Entity\Formation;
 use App\Entity\Module;
+use App\Entity\Formation;
+use App\Form\ModulesType;
 use App\Form\FormationType;
 use App\Repository\FormationRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
 /**
  * @Route("/formation")
  */
@@ -25,8 +30,16 @@ class FormationController extends AbstractController
     /**
      * @Route("/", name="formation_index", methods={"GET"})
      */
-    public function index(FormationRepository $formationRepository): Response
+    public function index( Request $request, PaginatorInterface $paginator): Response
     {
+        // Methd findBy por réquerer les donnees avec les crétéres de filtre et de tri
+        $donnees=$this->getDoctrine()->getRepository(Formation::class)->findBy([],['libelle'=>'asc']);
+
+        $formations= $paginator->paginate(
+            $donnees, // on passe les donnees
+            $request->query->getInt('page',1), // numero de la page en cours, la page 1 par defaut
+            4, //nombre d'elements par page.
+        );
         // $pdfOptions = new Options();
         // $pdfOptions->set('defaultFont', 'Arial');
         
@@ -59,9 +72,9 @@ class FormationController extends AbstractController
         
         // // Send some text response
         // $reponse= new Response("The PDF file has been succesfully generated !");
-
+            
         return $this->render('formation/index.html.twig', [
-            'formations' => $formationRepository->findAll(),
+            'formations' => $formations,
             // 'reponse' =>$reponse
         ]);
     }
@@ -166,6 +179,25 @@ class FormationController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    /**
+     * @Route("/{id}/ajoutDuree", name="add_duree", methods={"GET","POST"})
+     */
+    public function addModuleToFormation(Request $request, Formation $formation, EntityManagerInterface $em): Response
+    {
+        $form= $this->createForm(ModulesType::class, $formation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($formation);
+            $em->flush();
+
+            return $this->redirectToRoute('formation_index');
+        }
+        return $this->render('espace/addDuree.html.twig', [
+            'form'=> $form->createView(),
+            'formation'=> $formation,
+        ]);
+    }
 
     /**
      * @isGranted("ROLE_ADMINISTRATEUR")
@@ -181,4 +213,8 @@ class FormationController extends AbstractController
 
         return $this->redirectToRoute('formation_index');
     }
+    
+    
+
 }
+

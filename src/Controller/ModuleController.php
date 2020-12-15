@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Entity\Module;
 use App\Form\ModuleType;
 use App\Repository\ModuleRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/module")
@@ -20,10 +21,17 @@ class ModuleController extends AbstractController
      * @isGranted("ROLE_SECRITARIAT")
      * @Route("/", name="module_index", methods={"GET"})
      */
-    public function index(ModuleRepository $moduleRepository): Response
-    {
+    public function index(Request $request, PaginatorInterface $paginator): Response
+    {// Methd findBy por réquerer les donnees avec les crétéres de filtre et de tri
+        $donnees=$this->getDoctrine()->getRepository(Module::class)->findBy([],['libelle'=>'asc']);
+
+        $modules= $paginator->paginate(
+            $donnees, // on passe les donnees
+            $request->query->getInt('page',1), // numero de la page en cours, la page 1 par defaut
+            4, //nombre d'elements par page.
+        );
         return $this->render('module/index.html.twig', [
-            'modules' => $moduleRepository->findAll(),
+            'modules' => $modules,
         ]);
     }
 

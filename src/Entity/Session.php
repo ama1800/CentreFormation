@@ -47,7 +47,7 @@ class Session
     private $formation;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Stagiaire::class, mappedBy="sessions" ,cascade="all")     
+     * @ORM\ManyToMany(targetEntity=Stagiaire::class, mappedBy="sessions" ,cascade={"persist"})     
      * @Assert\Valid()
      */
     private $stagiaires;
@@ -57,6 +57,11 @@ class Session
      * @Groups("session_prop")
      */
     private $photo;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $nbPlaces;
 
     
 
@@ -153,6 +158,18 @@ class Session
     public function setPhoto(?string $photo): self
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getNbPlaces(): ?int
+    {
+        return $this->nbPlaces;
+    }
+
+    public function setNbPlaces(int $nbPlaces): self
+    {
+        $this->nbPlaces = $nbPlaces;
 
         return $this;
     }

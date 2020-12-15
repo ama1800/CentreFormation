@@ -4,6 +4,7 @@
 
 {% block body %}
 <h1>Nos Formations</h1><br>
+{{ knp_pagination_render(formations) }}
 {% if is_granted("ROLE_RESPONSABLE") %}
 <a href="{{ path('formation_new') }}">Ajouter une Formation</a>
 {% endif %}
@@ -25,7 +26,7 @@
                 <tr>
                     <td><a href="{{ path('formation_show', {'id': formation.id}) }}">{{ formation.libelle }}</a></td>
                     <td>
-                        <p>{{ formation.description }}</p>
+                        <p>{{ formation.description|striptags }}</p>
                     </td>
                     <td><a
                             href="{{ path('categorie_show', {'id': formation.categorie.id}) }}">{{ formation.categorie.libelle }}</a>
@@ -50,5 +51,4 @@
         </table>
     </nav>
 </div>
-
 {% endblock %}

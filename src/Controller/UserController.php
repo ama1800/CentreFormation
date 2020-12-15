@@ -45,13 +45,12 @@ class UserController extends AbstractController
             // upload photo
             /** @var UploadedFile $brochureFile */
             $brochureFile = $form['brochure']->getData();
-            
-            if ($brochureFile) 
-            {
+
+            if ($brochureFile) {
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
 
                 // Move the file to the directory where brochures are stored
                 try {
@@ -68,32 +67,38 @@ class UserController extends AbstractController
                 $user->setPhoto($newFilename);
             }
 
-            $hash= $encoder->encodePassword($user, $user->getPassword());
+            $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
+            
             // Generer le token d'activation de compte
+
             $user->setActivationToken(md5(uniqid()));
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
             // Céation du message
-            $message= (new \Swift_Message('Activation de votre compte'))
-            // Expiditeur
-            ->setFrom('votre@adresse.fr')
-            // Destenataire
-            ->setTo('destinataire@adresse.fr')
-            // Contenu
-            ->setBody(
-               $this->renderView(
-                   'emails/activation.html.twig',['token' => $user->getActivationToken()]
-               ),
-               'text/html'
-            );
+            $message = (new \Swift_Message('Activation de votre compte'))
+                // Expediteur
+                ->setFrom('votre@adresse.fr')
+                // Destenataire
+                ->setTo($user->getEmail())
+                // Contenu
+                ->setBody(
+                    $this->renderView(
+                        'emails/activation.html.twig',
+                        ['token' => $user->getActivationToken()]
+                    ),
+                    'text/html'
+                );
             // on envoie l'email
             $mailer->send($message);
 
-
-            return $this->redirectToRoute('user_index');
+                
+        // Message flash de succes
+        $this->addFlash('warning', 'Création de compte avec succes. Email d\'activation est envoyer à '.$user->getEmail().'');
+            return $this->redirectToRoute('formation_index');
         }
 
         return $this->render('user/new.html.twig', [
@@ -115,23 +120,22 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user, UserPasswordEncoderInterface $encoder,SluggerInterface $slugger ): Response
+    public function edit(Request $request, User $user, UserPasswordEncoderInterface $encoder, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             // upload photo
             /** @var UploadedFile $brochureFile */
             $brochureFile = $form['brochure']->getData();
-            
-            if ($brochureFile) 
-            {
+
+            if ($brochureFile) {
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
 
                 // Move the file to the directory where brochures are stored
                 try {
@@ -147,11 +151,13 @@ class UserController extends AbstractController
                 // instead of its contents
                 $user->setPhoto($newFilename);
             }
-            $hash= $encoder->encodePassword($user, $user->getPassword());
+            $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_index');
+            // Message flash de supprission
+            $this->addFlash('success', 'Compte Mise à jour avec succes.');
+            return $this->redirectToRoute('formation_index');
         }
 
 
@@ -167,39 +173,39 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('user_index');
+        // Message flash de supprission
+        $this->addFlash('danger', 'Compte supprimer avec succes.');
+        return $this->redirectToRoute('formation_index');
     }
     // 
     /**
      * @Route("/activation/{token}", name="user_activation", methods={"GET","POST"})
      */
-    public function activation($token,UserRepository $userRepository ): Response
+    public function activation($token, UserRepository $userRepository): Response
     {
-        // verification de l'exestense de token a la base de donnee
-        $user=$userRepository->findOneBy(['activationToken' => $token]);
+        // verification de l'existance de token a la base de donnee
+        $user = $userRepository->findOneBy(['activationToken' => $token]);
 
         // Si aucun user ne posséde ce token
 
-        if(!$user)
-        {
+        if (!$user) {
             // Erreur ce token n'existe pas
             throw $this->createNotFoundException('Cet Utilisateur n\'exist pas!');
         }
         // Si token existe alors on le supprime
-        
+
         $user->setActivationToken(null);
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
 
         // Message flash de sucess activation
-        $this->addFlash('message', 'Votre compte est activer vous pouvez y acceder et changer votre mot de passe. Merci');
-        return $this->redirectToRoute('app_login');
+        $this->addFlash('message', 'Votre compte est activer vous pouvez y acceder et changer votre profile et mot de passe. Merci');
+        return $this->redirectToRoute('formation_index');
     }
 }

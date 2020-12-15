@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Formation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Extensions\Doctrine\MatchAgainst;
 
 /**
  * @method Formation|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,17 @@ class FormationRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Formation::class);
+    }
+    
+    public function search($mots)
+    {
+        $query= $this->createQueryBuilder('f');
+        if($mots !== null)
+        {
+            $query->andWhere('MATCH_AGAINST(f.libelle, f.description) AGAINST (:mots boolean)>0')
+            ->setParameter('mots', '*' . $mots . '*' ); // les deux étoiles permettent de trouver des mots par segument exemple "quan" nous affichera "quand"
+        }
+        return $query->getQuery()->getResult();
     }
 
     // /**

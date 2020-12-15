@@ -16,6 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class SessionType extends AbstractType
 {
@@ -43,14 +44,15 @@ class SessionType extends AbstractType
                 'class' => Formation::class,
                 'choice_label' => 'libelle'
             ])
-            ->add('stagiaires',EntityType::class,[
-                'class'=>  Stagiaire::class ,
-                'attr'=> ['class'=> 'selectpicker'],
-                'multiple'=> true,
-                'choice_label'=> function($stagiaire){
-                   return $stagiaire->getNom()." ".$stagiaire->getPrenom();
-                }
-            ]);
+            // ->add('stagiaires',EntityType::class,[
+            //     'class'=>  Stagiaire::class ,
+            //     'attr'=> ['class'=> 'selectpicker'],
+            //     'multiple'=> true,
+            //     'choice_label'=> function($stagiaire){
+            //        return $stagiaire->getNom()." ".$stagiaire->getPrenom();
+            //     }
+            // ])
+            ->add('nbPlaces', IntegerType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -17,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class UserType extends AbstractType
 {
@@ -42,8 +44,21 @@ class UserType extends AbstractType
                 ],
                 'multiple' => true,
             ])
-            ->add('password', PasswordType::class)
-            ->add('confirm_password', PasswordType::class)
+            // ->add('password', PasswordType::class)
+            ->add('password', RepeatedType::class, array(
+                'type' => PasswordType::class,
+                'mapped' => false,
+                'first_options' => array('label' => 'Mot de passe'),
+                'second_options' => array('label' => 'Confirmation du mot de passe'),
+                'constraints' => new Length([
+                    'min' => 6,
+                    'minMessage' => "Veuillez mettre plus de {{ limit }} characters",
+                    'max' => 16,
+                    'maxMessage' => "Veuillez ne pas mettre plus de {{ limit }} characters",
+                    
+                ]),
+                'required' => true
+            ))
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
             ->add('civilite', ChoiceType::class, [

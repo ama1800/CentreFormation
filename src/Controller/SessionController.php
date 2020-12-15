@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Session;
+use App\Entity\Formation;
+use App\Form\ModulesType;
 use App\Form\SessionType;
+use App\Form\StagiairesType;
 use App\Repository\SessionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @isGranted("ROLE_SECRITARIAT")
@@ -24,7 +27,7 @@ class SessionController extends AbstractController
      */
     public function index(SessionRepository $sessionRepository): Response
     {
-        
+
         return $this->render('session/index.html.twig', [
             'sessions' => $sessionRepository->findAll(),
         ]);
@@ -35,8 +38,7 @@ class SessionController extends AbstractController
      */
     public function calendar()
     {
-        return $this->render('session/calendar.html.twig'
-        );
+        return $this->render('session/calendar.html.twig');
     }
 
     /**
@@ -45,7 +47,7 @@ class SessionController extends AbstractController
     public function new(Request $request): Response
     {
         $session = new Session();
-        $form = $this->createForm(SessionType::class, $session,['validation_groups'=>'session_prop']);
+        $form = $this->createForm(SessionType::class, $session, ['validation_groups' => 'session_prop']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -89,6 +91,33 @@ class SessionController extends AbstractController
         return $this->render('session/edit.html.twig', [
             'session' => $session,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/ajoutStagiaires", name="add_stagiaires", methods={"GET","POST"})
+     */
+    public function addStagiairesToSession(Request $request, Session $session, EntityManagerInterface $em): Response
+    {
+        
+        $nb = $session->getNbPlaces();
+        $nbStagiaires = count($session->getStagiaires());
+        $form = $this->createForm(StagiairesType::class, $session);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($nb > $nbStagiaires) {
+                $em->persist($session);
+                $em->flush();
+                return $this->redirectToRoute('session_index');
+            }
+            else
+             $this->addFlash('danger', 'La session est compléte vous pouvez plus ajouter de stagiaires.');
+            return $this->redirectToRoute('session_show', ['id'=> $session->getId()]);
+        }
+        return $this->render('session/addStagiaires.html.twig', [
+            'form' => $form->createView(),
+            'session' => $session,
         ]);
     }
 

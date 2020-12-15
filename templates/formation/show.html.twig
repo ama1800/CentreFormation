@@ -3,7 +3,14 @@
 {% block title %}Formation{% endblock %}
 
 {% block body %}
-<h1>{{ formation.libelle }}</h1>
+<h2>{{ formation.libelle }}</h2>
+
+<div>
+    {% for duree in formation.espaces %}
+    {{ duree }}
+    {% endfor %}
+    <a href="{{ path('add_duree', {'id' : formation.id})}}" role="button">Ajout\Modif Module</a>
+</div>
 <div>
     <div id="entete">
         <a style="position:absolute; right:1%; top: 15%;"
@@ -14,7 +21,7 @@
         <div style="max-width: 60%;">
             <h3>Le Métier</h3>
             <div class="card text-white bg-info mb-3" style="max-width: 90%;">
-                <p class="text-justify">{{ formation.description }}</p>
+                <p class="text-justify">{{ formation.description|striptags }}</p>
             </div>
             <h3>La Duree</h3>
             <div class="card text-white bg-info mb-3" style="max-width: 90%;">
@@ -64,7 +71,6 @@
             {% endfor %}
         </div>
     </div>
-
 </div>
 <a class="btn btn-primary btn-lg" href="{{ path('formation_index') }}">liste des Formations</a>
 {% if is_granted("ROLE_RESPONSABLE") %}

@@ -10,97 +10,8 @@ for (let i = 0; i < acc.length; i++) {
       text.style.display = "block";
     }
   });
-}
-/** CollectionType*/
-
-    //création de 3 éléments HTMLElement    
-    var $addCollectionButton = $('<button type="button" class="add_collection_link">Ajouter Module</button>');
-    var $delCollectionButton = $('<button type="button" class="del_collection_link">Supprimer</button>');
-    //le premier élément li de la liste (celui qui contient le bouton 'ajouter')
-    var $newLinkLi = $('<li></li>').append($addCollectionButton);
-    
-    function generateDeleteButton(){
-        var $btn = $delCollectionButton.clone();
-        $btn.on("click", function(){//événement clic du bouton supprimer
-            $(this).parent("li").remove();
-            $collection.data('index', $collection.data('index')-1)
-        })
-        return $btn;
-    }
-    //fonction qui ajoute un nouveau champ li (en fonction de l'entry_type du collectionType) dans la collection
-    function addCollectionForm($collection, $newLinkLi) {
-        
-        //contenu du data attribute prototype qui contient le HTML d'un champ
-        var newForm = $collection.data('prototype');
-        //le nombre de champs déjà présents dans la collection
-        var index = $collection.data('index');
-        //on remplace l'emplacement prévu pour l'id d'un champ par son index dans la collection
-        newForm = newForm.replace(/__name__/g, index);
-        //on modifie le data index de la collection par le nouveau nombre d'éléments
-        $collection.data('index', index+1);
-
-        //on construit l'élément li avec le champ et le bouton supprimer
-        var $newFormLi = $('<li></li>').append(newForm).append(generateDeleteButton());
-        //on ajoute la nouvelle li au dessus de celle qui contient le bouton "ajouter"
-        $newLinkLi.before($newFormLi);
-    }
-    //rendu de la collection au chargement de la page
-    $(document).ready(function() {
-        //on pointe la liste complete (le conteneur de la collection)
-        var $collection = $("ul#gestionDurees")
-        //on y ajoute le bouton ajouter (à la fin du contenu)
-        $collection.append($newLinkLi);
-
-        //pour chaque li déjà présente dans la collection (dans le cas d'une modification)
-        $(".gestionDuree").each(function(){
-            //on génère et ajoute un bouton "supprimer"
-            $(this).append(generateDeleteButton());
-        })
-        //le data index de la collection est égal au nombre de input à l'intérieur
-        $collection.data('index', $collection.find(':input').length);
-        $addCollectionButton.on('click', function(e) { // au clic sur le bouton ajouter
-            //si la collection n'a pas encore autant d'élément que le maximum autorisé
-            //if($collection.data('index') <= $("input[maxNb]").val()){
-                //on appelle la fonction qui ajoute un nouveau champ
-                addCollectionForm($collection, $newLinkLi);
-            //}
-            //else alert("Nb max atteint !")
-        });
-
-    });
 
 
-
-/* calendrier */
-//  document.addEventListener('DOMContentLoaded', () => 
-//  {
-//   var calendarEl = document.getElementById('calendar-holder');
-
-//   var calendar = new FullCalendar.Calendar(calendarEl, {
-//       defaultView: 'dayGridMonth',
-//       editable: true,
-//       eventSources: [
-//           {
-//               url: "{{ path('fc_load_events') }}",
-//               method: "POST",
-//               extraParams: {
-//                   filters: JSON.stringify({})
-//               },
-//               failure: () => {
-//                   // alert("There was an error while fetching FullCalendar!");
-//               },
-//           },
-//       ],
-//       header: {
-//           left: 'prev,next today',
-//           center: 'title',
-//           right: 'dayGridMonth,timeGridWeek,timeGridDay',
-//       },
-//       plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // https://fullcalendar.io/docs/plugin-index
-//       timeZone: 'UTC',
-//   });
-//   calendar.render();
-// });
 /* ZipCode */
 
 $(document).ready(function () {
@@ -133,21 +44,18 @@ $(document).ready(function () {
   })
 
   /** Adresse */
-  // $(cp).on('blur', function () {
-  setTimeout(function () {
-    $(adresse).on('input', function () {
+    $(adresse).on('keypress', function () {
       let code = $(cp).val()
-      let nom = $(this).val().split('')
+      let nom = $(this).val().split(' ')
       let part = ""
       for (let i = 0; i < nom.length; i++) {
-        part += nom[i]
+        part += nom[i]+'+'
         if (part.length >= 1) {
           let urlAdresse = adressUrl + part + "&postcode=" + code + format
           console.log(urlAdresse)
-          fetch(
+    fetch(
             urlAdresse,
             { method: 'get' }).then(response => response.json()).then(results => {
-              console.log(results.features)
               if (results.features) {
                 let data = results.features
                 data.forEach((adresse) => {
@@ -161,10 +69,8 @@ $(document).ready(function () {
 
       }
     })
-  })
-}, 0);
-// });
-
+})
+}
 // /** modifier password */
 // let pass = document.getElementById("editPass")
 // let input = document.getElementById("pass")
@@ -293,3 +199,5 @@ $(document).ready(function () {
 //       links.style.display = "grid";
 //     }
 //   })
+
+

@@ -34,12 +34,17 @@ class Espace
      */
     private $module;
 
+    public function __toString()
+    {
+        return $this->getDuree();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDuree(): ?int
+    public function getDuree(): ?string
     {
         return $this->duree;
     }

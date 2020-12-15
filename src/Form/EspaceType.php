@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Espace;
 use App\Entity\Formation;
 use App\Entity\Module;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,20 +18,12 @@ class EspaceType extends AbstractType
     {
         $builder
             ->add('duree', IntegerType::class)
-            ->add('formation',EntityType::class, [
-                'class'=>  Formation::class ,
-                'attr'=> ['class'=> 'selectpicker'],
-                'multiple'=> false,
-                'choice_label'=> function($formation){
-                   return $formation->getLibelle();
-                }
-            ])
             ->add('module',EntityType::class, [
                 'class'=>  Module::class ,
-                'attr'=> ['class'=> 'selectpicker'],
-                'multiple'=> false,
-                'choice_label'=> function($module){
-                   return $module->getLibelle();
+                'label'=> false,
+                'query_builder'=> function(EntityRepository $er){
+                    return $er->createQueryBuilder('m')
+                    ->orderBy('m.libelle', 'ASC');
                 }
             ])
         ;

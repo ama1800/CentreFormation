@@ -8,6 +8,7 @@ use App\Form\EspaceType;
 use App\Entity\Categorie;
 use App\Entity\Formation;
 use App\Entity\Session;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -24,7 +25,7 @@ class FormationType extends AbstractType
     {
         $builder
             ->add('libelle', TextType::class)
-            ->add('description', TextareaType::class)
+            ->add('description', CKEditorType::class)
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
                 'choice_label' => 'libelle'

@@ -3,45 +3,63 @@
 {% block title %}Session{% endblock %}
 
 {% block body %}
-    <h1>Session</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ session.id }}</td>
+<a href="{{ path('add_stagiaires', {'id' : session.id})}}" role="button">Ajouter Stagiaires</a>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ session.id }}</td>
+        </tr>
+        <tr>
+            <th>Libelle</th>
+            <td>{{ session.libelle }}</td>
+        </tr>
+        {% if session.stagiaires|length < session.nbPlaces %} <tr>
+            <th>Places occuper</th>
+            <td>{{ session.stagiaires|length }}</td>
             </tr>
             <tr>
-                <th>Libelle</th>
-                <td>{{ session.libelle }}</td>
+                <th>Places restantes</th>
+                <td>{{ session.nbPlaces - session.stagiaires|length }}</td>
             </tr>
             <tr>
-                <th>StartAt</th>
-                <td>{{ session.startAt ? session.startAt|date('Y-m-d') : '' }}</td>
+                {% else %}
+                <div class="alert alert-danger">
+                    Session est Complete.
+                </div>
+            <tr>
+                <th>Nombres Places</th>
+                <td>{{ session.nbPlaces}}</td>
+            </tr>
+            {% endif %}
+            <th>StartAt</th>
+            <td>{{ session.startAt ? session.startAt|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
                 <th>EndAt</th>
                 <td>{{ session.endAt ? session.endAt|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
-                <th>Stagiaires</th>
-                {% for stagiaire in session.stagiaires %}
-                    <pre>
-                        {{ dump(stagiaire) }}
-                    </pre>
-                    <tbody>
-                        <tr>
-                        <td>{{ stagiaire.nom }} {{ stagiaire.prenom }}</td>
-                        </tr>
-                    </tbody>
-                {% endfor %}
-            </tr>
-        </tbody>
-    </table>
+    </tbody>
+    <tbody>
+        <th>Stagiaires</th>
+        {% for stagiaire in session.stagiaires %}
+        <tr>
+            <td>
+                <div class="alert alert-success">{{ stagiaire.nom }} {{ stagiaire.prenom }}</div>
 
-    <a href="{{ path('session_index') }}">back to list</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </tr>
+</table>
 
-    <a href="{{ path('session_edit', {'id': session.id}) }}">edit</a>
+<a href="{{ path('session_index') }}">back to list</a>
 
-    {{ include('session/_delete_form.html.twig') }}
+<a href="{{ path('session_edit', {'id': session.id}) }}">edit</a>
+
+{{ include('session/_delete_form.html.twig') }}
 {% endblock %}

@@ -21,7 +21,7 @@
   </div>
 </div>
 <div style="display: flex;">
-  <a style=" margin-right: 13%; width: 10%" href="{{ path('profile', {'id': user.id}) }}"
+  <a style=" margin-right: 13%; width: 10%" href="{{ path('profile_modif', {'id': user.id}) }}"
     class="btn btn-primary">Modifier</a>
   {{ include('user/_delete_form.html.twig') }}
   {# {% else %}
@@ -32,92 +32,24 @@
 <div class="example-wrapper">
     <div>
         <h3>Modification du Profile</h3>
-        <form name="user" method="post">
-            <div id="user">
-                <div>
-                    <label for="user_email" class="required">Email</label>
-                    <input type="email" id="user_email" name="user[email]" required="required" value="{{ user.email }}">
-                </div>
-                <div>
-                    <label for="user_nom" class="required">Nom</label>
-                    <input type="text" id="user_nom" name="user[nom]" required="required" value="{{ user.nom }}">
-                </div>
-                <div>
-                    <label for="user_prenom" class="required">Prenom</label>
-                    <input type="text" id="user_prenom" name="user[prenom]" required="required" value="{{ user.prenom }}">
-                </div>
-                <div>
-                    <label for="user_civilite" class="required">Civilite</label>
-                    <select id="user_civilite" name="user[civilite]" class="selectpicker" value="{{ user.civilite }}">
-                        <option value="NO">MONSIEUR</option>
-                        <option value="YES">MADAME</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="user_dateNaissance" class="required">Date naissance</label>
-                    <input type="date" id="user_dateNaissance" name="user[dateNaissance]" required="required" value="{{ user.dateNaissance|date('d-m-Y') }}">
-                </div>
-                <div>
-                    <label for="user_cp" class="required">Cp</label>
-                    <input type="text" id="user_cp" name="user[cp]" required="required" value="{{ user.cp }}">
-                </div>
-                <div>
-                    <label for="user_commune" class="required">Commune</label>
-                    <select type="text" id="user_commune" name="user[commune]" required="required" value="{{ user.commune }}">
-
-                    </select>
-                </div>
-                <div>
-                    <label for="user_adresse" class="required">Adresse</label>
-                    <input list="adresses" type="text" id="user_adresse" name="user[adresse]" required="required" value="{{ user.adresse }}">
-                    <datalist id="adresses">
-
-                    </datalist>
-                </div>
-                <button type="submit" class="btn btn-sucess">Modifier</button>
-            </div>
-        </form>
-    </div>
-
+        {{ form(form1) }}
+    </div> 
     <div>
         <h3>Modification du Password</h3>
-        <form method="POST">
-            <div id="user">
-                <label for="user_password" class="required">Password Actuel</label>
-                <input type="password" id="passwordActuel" name="passwordActuel" placeholder="votre mot de passe actuel">
-                <div>
-                    <label for="user_password" class="required">Password</label>
-                    <input type="password" id="user_password" name="user[password]" required="required" placeholder="nouveau mot de passe min 8 caractéres">
-                </div>
-                <div>
-                    <label for="user_confirm_password" class="required">Confirm password</label>
-                    <input type="password" id="user_confirm_password" name="user[confirm_password]" required="required" placeholder="confirmez votre mot de passe">
-                </div>
-                <button type="submit" class="btn btn-sucess">Modifier</button>
-            </div>
-        </form>
+        {{ form(form2) }}
+        
     </div>
 
     <div>
         <h3>Modification de la photo</h3>
-        <form name="user" method="post" enctype="multipart/form-data">
-            <div id="user">
-                <div>
-                    <label for="user_brochure">Photo</label>
-                    <input type="file" id="user_brochure" name="user[brochure]">
-                </div>
-                <button type="submit" class="btn btn-sucess">Modifier</button>
-            </div>
-        </form>
+        {{ form(form3) }}
     </div>
-</div>
+</div>#}
 {% else %}
 <span style="color: red">Vous n'etes pas autoriser à afficher la page..! Contactez l'Admin. </span>
 {% endif %}
 
 {% endblock %}
 {% block javascripts %}
-{{ parent()}}
-<script src="/js/script.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{{ parent('base.html.twig')}}
 {% endblock %}

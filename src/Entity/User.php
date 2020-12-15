@@ -38,18 +38,12 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=255)
      * @Assert\Length(min="8", minMessage= "Votre Pass doit faire minimum 8 caractéres")
-     * @Assert\EqualTo(propertyPath= "confirm_password", message= "Vos mots de passes doivent etre identiques")
+     *
      */
     private $password;
-
-    /*
-     * @ORM\Column(type="string")
-     * @Assert\EqualTo(propertyPath= "password", message= "Vos mots de passes doivent etre identiques")
-    */
-    public $confirm_password;
-
+    
     /**
      * @ORM\Column(type="string", length=255)
      */
