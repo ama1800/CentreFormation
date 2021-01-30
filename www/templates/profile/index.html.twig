@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du profile{% endblock %}
+
+{% block body %}
+{% if app.user.id == user.id or is_granted("ROLE_SUPER_ADMIN") %}
+  <h1 class="text-warning">Bonjour {{ user.civilite ? 'Monsieur' : 'Madame' }} {{ user.nom }} {{ user.prenom }}</h1>
+<div class="card border-info mb-3" style="max-width: 50%;">
+  <div  style="max-width: 100%;">
+    <div class="card-header text-danger">user ID: {{ user.id }}<br>
+    </div>
+    <div class="card-body text-success">
+      <h6 class="card-title">DATE DE NAISSANCE :
+        {{ user.dateNaissance ? date().diff(date(user.dateNaissance)).y : '' }} Ans</h6>
+      <p class="card-text">ADRESSE : <br>{{ user.adresse }}<br> {{ user.cp }}<br> {{ user.commune }}</p>
+      <h6>{{user.email}}</h6>
+    </div>
+  </div>
+  <div>
+    <img width="200" height="250" class="img-fluid" src="{{ asset('uploads/' ~  user.photo) }}" alt="{{ user.nom}}"></td>
+  </div>
+</div>
+<div style="display: flex;">
+  <a style=" margin-right: 13%; width: 10%" href="{{ path('profile_modif', {'id': user.id}) }}"
+    class="btn btn-primary">Modifier</a>
+  {{ include('user/_delete_form.html.twig') }}
+  {# {% else %}
+  <span style="color: red">Vous n'etes autoriser à modifier ou à supprimer à ce contenu..!</span> #}
+
+</div>
+</div><br><br>
+<div class="example-wrapper">
+    <div>
+        <h3>Modification du Profile</h3>
+        {{ form(form1) }}
+    </div> 
+    <div>
+        <h3>Modification du Password</h3>
+        {{ form(form2) }}
+        
+    </div>
+
+    <div>
+        <h3>Modification de la photo</h3>
+        {{ form(form3) }}
+    </div>
+</div>#}
+{% else %}
+<span style="color: red">Vous n'etes pas autoriser à afficher la page..! Contactez l'Admin. </span>
+{% endif %}
+
+{% endblock %}
+{% block javascripts %}
+{{ parent('base.html.twig')}}
+{% endblock %}

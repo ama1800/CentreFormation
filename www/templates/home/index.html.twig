@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueill{% endblock %}
+
+{% block body %}
+<div class="example-wrapper">
+    {% if app.user %}
+    <h1>Bienvenue {{ app.user.nom }} {{ app.user.prenom }}! ✅</h1>
+    {% else %}
+    <h1>Bienvenue Visiteur! ✅</h1>
+    {% endif %}
+    <ul>
+        <li>Liste des <a href="{{ path('formation_index')}}">
+                Formations</a></li>
+        <li>Calendrier de <a href="{{  path('session_calendar')}}">Formations</a></li>
+    </ul>
+</div>
+<div id="carte">
+    <div>
+        <p>A venir..!</p>
+    </div>
+    <div>
+        <address style="color: black; font-size:x-large ">
+            <p>Adresse: <br><span>3 Place du Capitaine Dreyfus,</span><br> 68000 Colmar</p>
+        </address>
+
+        <div id="map">
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent('base.html.twig')}}
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+    <script src="/js/carte.js"></script>
+{% endblock %}

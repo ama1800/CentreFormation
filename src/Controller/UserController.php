@@ -98,7 +98,7 @@ class UserController extends AbstractController
                 
         // Message flash de succes
         $this->addFlash('warning', 'Création de compte avec succes. Email d\'activation est envoyer à '.$user->getEmail().'');
-            return $this->redirectToRoute('formation_index');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('user/new.html.twig', [
@@ -155,9 +155,9 @@ class UserController extends AbstractController
             $user->setPassword($hash);
             $this->getDoctrine()->getManager()->flush();
 
-            // Message flash de supprission
+            // Message flash de success
             $this->addFlash('success', 'Compte Mise à jour avec succes.');
-            return $this->redirectToRoute('formation_index');
+            return $this->redirectToRoute('home');
         }
 
 
@@ -180,7 +180,7 @@ class UserController extends AbstractController
         }
         // Message flash de supprission
         $this->addFlash('danger', 'Compte supprimer avec succes.');
-        return $this->redirectToRoute('formation_index');
+        return $this->redirectToRoute('home');
     }
     // 
     /**
@@ -206,6 +206,6 @@ class UserController extends AbstractController
 
         // Message flash de sucess activation
         $this->addFlash('message', 'Votre compte est activer vous pouvez y acceder et changer votre profile et mot de passe. Merci');
-        return $this->redirectToRoute('formation_index');
+        return $this->redirectToRoute('home');
     }
 }

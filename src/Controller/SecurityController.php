@@ -23,15 +23,16 @@ class SecurityController extends AbstractController
     {
         $user = $this->getUser();
         if ($user) {
-            
+
             return $this->redirectToRoute('/');
         }
 
-        // get the login error if there is one
+        // permet le message d'erreur si y'en a
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+        // Ce rappel du dernier email utiliser pour se connecter
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        //affiche la page de connexion avec input prérempli avec l'email du dernier user connecter ou une erreur! 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
@@ -43,7 +44,8 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
         // Message flash
         $this->addFlash('danger', 'Au revoir, Vous étes déconnecté!');
-        return $this->redirectToRoute('home');
+        //Rederiction vers la page de connexion
+        return $this->redirectToRoute('app_login');
     }
 
     /**

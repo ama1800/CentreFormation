@@ -43,7 +43,7 @@ class User implements UserInterface
      *
      */
     private $password;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -53,7 +53,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $prenom;
-    
+
     /**
      * @ORM\Column(type="boolean")
      */
@@ -107,7 +107,7 @@ class User implements UserInterface
 
     public function __toString()
     {
-        $this->getNom().''.$this->getPrenom().''.$this->getEmail();
+        $this->getNom() . '' . $this->getPrenom() . '' . $this->getEmail();
     }
 
     public function getId(): ?int

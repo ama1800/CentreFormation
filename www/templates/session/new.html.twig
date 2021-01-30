@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Session{% endblock %}
+
+{% block body %}
+
+<h1>Créer nouvelle session</h1>
+{{ include('session/_form.html.twig') }}
+
+{#<ul 
+    {% for stagiaireField in form.stagiaires %}
+    <li>
+        {{ form_errors(stagiaireField) }}
+        {{ form_widget(stagiaireField) }}
+    </li>
+    {% endfor %}
+    </ul>#}
+    <a href="{{ path('session_index') }}">Page Des Sessions</a>
+    {% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Module{% endblock %}
+
+{% block body %}
+<h1>Module</h1>
+<div class="headforum">
+    <nav class="navbar navbar-inverse">
+        <table class="table">
+            <tbody class="table-light">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ module.id }}</td>
+                </tr>
+                <tr>
+                    <th>Libelle</th>
+                    <td>{{ module.libelle }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ module.description }}</td>
+                </tr>
+
+                <tr>
+                    <th>Categorie:</th>
+                    <td><a href="{{ path('categorie_show', {'id': module.categorie.id}) }}">{{ module.categorie.libelle }}
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </nav>
+</div>
+
+<a href="{{ path('module_index') }}">back to list</a>
+
+<a href="{{ path('module_edit', {'id': module.id}) }}">edit</a>
+
+{{ include('module/_delete_form.html.twig') }}
+{% endblock %}

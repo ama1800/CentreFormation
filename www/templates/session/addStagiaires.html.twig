@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<h2>{{session.libelle}}</h2>
+
+{{ form_start(form) }}
+<ul id="gestionStagiaires" data-prototype="{{ form_row(form.stagiaires.vars.prototype)|e }}">
+
+    {% for stagiaire in form.stagiaires %}
+    <li class="gestionStagiaire">{{ form_row( stagiaire)  }}</li>
+
+    {% endfor %}
+
+</ul>
+
+{{ form_row(form.submit) }}
+
+{{ form_end(form) }}
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+  <script src='/js/CollectionHandlerStagiaire.js'></script>
+{% endblock %}

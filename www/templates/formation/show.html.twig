@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formation{% endblock %}
+
+{% block body %}
+<h2>{{ formation.libelle }}</h2>
+
+<div>
+    {% for duree in formation.espaces %}
+    {{ duree }}
+    {% endfor %}
+    <a href="{{ path('add_duree', {'id' : formation.id})}}" role="button">Ajout\Modif Module</a>
+</div>
+<div>
+    <div id="entete">
+        <a style="position:absolute; right:1%; top: 15%;"
+            href="{{ path("categorie_show", { 'id': formation.categorie.id})}}"><button type="button"
+                class="btn btn-outline-primary">Categorie: {{ formation.categorie.libelle }}</button></a>
+    </div>
+    <div class="description">
+        <div style="max-width: 60%;">
+            <h3>Le Métier</h3>
+            <div class="card text-white bg-info mb-3" style="max-width: 90%;">
+                <p class="text-justify">{{ formation.description|striptags }}</p>
+            </div>
+            <h3>La Duree</h3>
+            <div class="card text-white bg-info mb-3" style="max-width: 90%;">
+                <p class="text-justify">
+                    {% set duree = 0 %}
+                    {% for module in formation.espaces  %}
+                    {% if module.duree  is defined %}
+                    {% set duree = duree + module.duree %}
+                    {% if loop.last %}
+                    <span>{{ duree + 1 }} Semaines plus un stage en entreprise de 4 Semaines</span>
+                    {% endif %}
+                    {% else %}
+                    {% if loop.last %}
+                    <span style="color: red;">Formation en construction.. La duree n'est pas définis. </span>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}</p>
+            </div>
+            <div style="max-width: 100%;">
+                <img class="img-fluid" src="{{ asset('uploads/' ~  formation.photo) }}" alt="{{ formation.libelle }}">
+            </div><br>
+        </div>
+        <div style="max-width: 40%;">
+            <h3>Les Modules</h3>
+            {% for module in formation.espaces %}
+            <ul>
+                <li style="max-width: 90%;">
+                    <div class="list-group">
+                        <blockquote>
+                            <span style="color: black;"> Module n°{{ loop.index }} </span>
+                            <a class="list-group-item list-group-item-action active accordion"
+                                style="margin:0;">{{ module.module.libelle }}</a>
+                            <p class="text" style="display:none; border:2px solid #007bff">
+                                {{ module.module.description }}<br> Durée de: <small>{{ module.duree}} Semaines</small>
+                                <a href="{{ path('module_show', {'id': module.id}) }}"
+                                    class="list-group-item list-group-item-action primary">Plus
+                                </a>
+                            </p>
+                        </blockquote>
+                    </div>
+                </li>
+            </ul>
+            {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<a class="btn btn-primary btn-lg" href="{{ path('formation_index') }}">liste des Formations</a>
+{% if is_granted("ROLE_RESPONSABLE") %}
+<a class="btn btn-primary btn-lg" href="{{ path('formation_edit', {'id': formation.id}) }}">Modifier</a>
+{{ include('formation/_delete_form.html.twig') }}
+{% endif %}
+{% endblock %}

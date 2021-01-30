@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace{% endblock %}
+
+{% block body %}
+<h1>Espace</h1>
+
+<div class="headforum">
+    <nav class="navbar navbar-inverse">
+        <table class="table">
+            <tbody class="table-light">
+                <tr>
+                    <th>Id:</th>
+                    <td>{{ espace.id }}</td>
+                </tr>
+                <tr>
+                    <th>Duree:</th>
+                    <td>{{ espace.duree }} semaines</td>
+                </tr>
+                <tr>
+                    <th>Categorie:</th>
+                    <td><a href="{{ path('categorie_show', {'id': espace.module.categorie.id}) }}">{{ espace.module.categorie.libelle }}</td>
+                </tr>
+                <tr>
+                    <th>Formation:</th>
+                    <td><a href="{{ path('formation_show', {'id': espace.formation.id}) }}">{{ espace.formation.libelle }}</td>
+                </tr>
+                <tr>
+                    <th>Module:</th>
+                    <td><a href="{{ path('module_show', {'id': espace.module.id}) }}">{{ espace.module.libelle}}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </nav>
+</div>
+
+<a href="{{ path('espace_index') }}">back to list</a>
+
+<a href="{{ path('espace_edit', {'id': espace.id}) }}">edit</a>
+
+{{ include('espace/_delete_form.html.twig') }}
+{% endblock %}

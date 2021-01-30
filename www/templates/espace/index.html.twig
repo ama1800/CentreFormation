@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Durees Modules@Formations{% endblock %}
+
+{% block body %}
+<h2>Les Durees Modules et Formations</h2>
+<div class="headforum">
+    <nav class="navbar navbar-inverse">
+        <table class="table">
+            <thead class="table-active">
+                <tr>
+                    <th>Module</th>
+                    <th>Duree</th>
+                    <th>Formation</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            {% for espace in espaces %}
+            <tbody class="table-light">
+                <tr>
+                    <td><a href="{{ path('module_show', {'id': espace.module.id}) }}">{{ espace.module.libelle}}</a>
+                    </td>
+                    <td>{{ espace.duree }} Semaines</td>
+                    <td>
+                        <small class="text-muted">
+                            <a
+                                href="{{ path('formation_show', {'id': espace.formation.id}) }}">{{ espace.formation.libelle }}</a>
+                        </small></td>
+                    <td>
+                        <a href="{{ path('espace_show', {'id': espace.id}) }}">show</a>
+                        <a href="{{ path('espace_edit', {'id': espace.id}) }}">edit</a>
+                    </td>
+                </tr>
+            </tbody>
+            {% else %}
+            <tbody class="table-light">
+                <tr>
+                    <td colspan="3">no records found</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </nav>
+</div>
+
+<a href="{{ path('espace_new') }}">Create new</a>
+{% endblock %}

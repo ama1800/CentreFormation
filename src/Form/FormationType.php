@@ -40,7 +40,7 @@ class FormationType extends AbstractType
             // ])
             ->add('brochure', FileType::class, [
                 'label' => 'Photo',
-                // unmapped means that this field is not associated to any entity property
+                // mapped' => false n'est pas lier à aucune entité
                 'mapped' => false,
                 // make it optional so you don't have to re-upload the PDF file
                 // every time you edit the Product details
@@ -59,8 +59,7 @@ class FormationType extends AbstractType
                         'mimeTypesMessage' => 'Inserez une extension valide. Seulement(.png, .jpg, .jpeg, ou .git)',
                     ])
                 ],
-            ])
-            ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

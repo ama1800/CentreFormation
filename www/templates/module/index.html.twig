@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Module index{% endblock %}
+
+{% block body %}
+    <h1>Les Modules</h1>
+    {{ knp_pagination_render(modules) }}
+
+    <div class="headforum">
+        <nav class="navbar navbar-inverse">
+            <table class="table">
+                <thead class="table-active">
+                    <tr>
+                        <th>Module</th>
+                        <th>Description</th>
+                        <th>Categorie</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+        {% for module in modules %}
+                <tbody class="table-light">
+                    <tr>
+                        <td><a href="{{ path('module_show', {'id': module.id}) }}">{{ module.libelle }}</a></td>
+                        <td>{{ module.description }}</td>
+                        <td><a href="{{ path('categorie_show', {'id': module.categorie.id}) }}">{{ module.categorie.libelle }}</a></td>
+                        <td>
+                            <a href="{{ path('module_show', {'id': module.id}) }}">show</a>
+                            <a href="{{ path('module_edit', {'id': module.id}) }}">edit</a>
+                        </td>
+                    </tr>
+                </tbody>
+                {% else %}
+                <tbody>
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </nav>
+    </div>
+
+    <a href="{{ path('module_new') }}">Ajouter un Module</a>
+{% endblock %}
