@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     var calendarEl = document.getElementById('calendar-holder');
-    //var session= document.querySelector('[data-entry-id]').dataset.entryId
-
     var calendar = new FullCalendar.Calendar(calendarEl, {
         themeSystem: 'bootstrap',
         locale: 'fr',

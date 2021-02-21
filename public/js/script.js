@@ -12,48 +12,48 @@ for (let i = 0; i < acc.length; i++) {
   });
 
 
-/* ZipCode */
+  /* ZipCode */
 
-$(document).ready(function () {
-  const comUrl = "https://geo.api.gouv.fr/communes?codePostal="
-  const adressUrl = "https://api-adresse.data.gouv.fr/search/?q="//8+bd+du+port&postcode=44380
-  const format = "&format=json"
-  let nom = "";
-  let cp = $('#user_cp')
-  let ville = $('#user_commune')
-  let adresse = $('#user_adresse')
-  let adresses = $('#adresses')
-  $(cp).on('blur', function () {
-    let code = $(this).val()
-    let url = comUrl + code + format
-    console.log(url)
-    fetch(
-      url,
-      { method: 'get' }).then(response => response.json()).then(results => {
-        // console.log(results)
-        if (results.length) {
-          $.each(results, function (k, v) {
-            // console.log(v)
-            // console.log(v.nom)
-            $(ville).append('<option value="' + v.nom + '">' + v.nom + '</option>')
-          })
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-  })
+  $(document).ready(function () {
+    const comUrl = "https://geo.api.gouv.fr/communes?codePostal="
+    const adressUrl = "https://api-adresse.data.gouv.fr/search/?q="//8+bd+du+port&postcode=44380
+    const format = "&format=json"
+    let nom = "";
+    let cp = $('#user_cp')
+    let ville = $('#user_commune')
+    let adresse = $('#user_adresse')
+    let adresses = $('#adresses')
+    $(cp).on('blur', function () {
+      let code = $(this).val()
+      let url = comUrl + code + format
+      console.log(url)
+      fetch(
+        url,
+        { method: 'get' }).then(response => response.json()).then(results => {
+          // console.log(results)
+          if (results.length) {
+            $.each(results, function (k, v) {
+              // console.log(v)
+              // console.log(v.nom)
+              $(ville).append('<option value="' + v.nom + '">' + v.nom + '</option>')
+            })
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    })
 
-  /** Adresse */
+    /** Adresse */
     $(adresse).on('keypress', function () {
       let code = $(cp).val()
       let nom = $(this).val().split(' ')
       let part = ""
       for (let i = 0; i < nom.length; i++) {
-        part += nom[i]+'+'
+        part += nom[i] + '+'
         if (part.length >= 1) {
           let urlAdresse = adressUrl + part + "&postcode=" + code + format
           console.log(urlAdresse)
-    fetch(
+          fetch(
             urlAdresse,
             { method: 'get' }).then(response => response.json()).then(results => {
               if (results.features) {
@@ -69,7 +69,7 @@ $(document).ready(function () {
 
       }
     })
-})
+  })
 }
 // /** modifier password */
 // let pass = document.getElementById("editPass")

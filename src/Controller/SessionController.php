@@ -99,7 +99,7 @@ class SessionController extends AbstractController
      */
     public function addStagiairesToSession(Request $request, Session $session, EntityManagerInterface $em): Response
     {
-        
+
         $nb = $session->getNbPlaces();
         $nbStagiaires = count($session->getStagiaires());
         $form = $this->createForm(StagiairesType::class, $session);
@@ -110,10 +110,9 @@ class SessionController extends AbstractController
                 $em->persist($session);
                 $em->flush();
                 return $this->redirectToRoute('session_index');
-            }
-            else
-             $this->addFlash('danger', 'La session est compléte vous pouvez plus ajouter de stagiaires.');
-            return $this->redirectToRoute('session_show', ['id'=> $session->getId()]);
+            } else
+                $this->addFlash('danger', 'La session est compléte vous ne pouvez plus ajouter de stagiaires.');
+            return $this->redirectToRoute('session_show', ['id' => $session->getId()]);
         }
         return $this->render('session/addStagiaires.html.twig', [
             'form' => $form->createView(),
